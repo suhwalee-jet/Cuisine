@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding refunds – Just Eat Knowledge Centre</title>
+
+<!-- PIE Critical FOFT: preload Regular immediately -->
+<link rel="preload" href="https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-Regular-optimised.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- PIE @font-face: Regular declared inline so it applies without waiting for external CSS -->
+<style>
+@font-face {
+  font-family: 'JETSansDigital';
+  src: url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-Regular-optimised.woff2') format('woff2'),
+       url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-Regular-optimised.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+}
+/* Bold & ExtraBold are lazy-loaded via Font Loading API below.
+   Until they arrive the browser renders faux-bold from the Regular. */
+@font-face {
+  font-family: 'JETSansDigital';
+  src: url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-Bold-optimised.woff2') format('woff2'),
+       url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-Bold-optimised.woff') format('woff');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JETSansDigital';
+  src: url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-ExtraBold-optimised.woff2') format('woff2'),
+       url('https://d30v2pzvrfyzpo.cloudfront.net/fonts/JETSansDigital-ExtraBold-optimised.woff') format('woff');
+  font-weight: 800;
+  font-display: swap; /* placeholder — real value set by dummy to keep linter happy */
+  font-weight: 800; font-display: swap;
+}
+
+/* PIE DESIGN TOKENS — light theme */
+:root {
+  --color-interactive-brand: #F36805;
+  --color-brand-30:          #FF8000;
+  --color-brand-10:          #FDDFC3;
+  --color-brand-tonal:       #FFF2E5;
+  --color-brand-text:        #B45512;
+
+  --color-bg:                #FFFFFF;
+  --color-container-subtle:  #F5F5F5;
+  --color-container-strong:  #EBEBEB;
+  --color-container-dark:    #1C1C1C;
+
+  --color-border:            #EBEBEB;
+  --color-divider:           rgba(0,0,0,.08);
+
+  --color-content:           rgba(0,0,0,.76);
+  --color-content-sub:       rgba(0,0,0,.64);
+  --color-content-muted:     rgba(0,0,0,.55);
+  --color-content-inverse:   rgba(255,255,255,.90);
+
+  --color-positive:          #1A8A45;
+  --color-positive-tonal:    #EDF7F1;
+  --color-positive-02:       #D4EDDE;
+
+  --radius-s:   4px;
+  --radius-m:   8px;
+  --radius-l:   12px;
+  --radius-xl:  16px;
+  --radius-full:9999px;
+
+  --sp-a:4px; --sp-b:8px; --sp-c:12px; --sp-d:16px;
+  --sp-e:20px; --sp-f:24px; --sp-g:28px; --sp-h:32px;
+  --sp-i:40px; --sp-j:48px;
+
+  --nav-h: 60px;
+  --sb-w:  220px;
+  --toc-w: 220px;
+  --font: 'JETSansDigital', Arial, sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:400 15px/1.6 var(--font);background:var(--color-bg);color:var(--color-content);-webkit-font-smoothing:antialiased;min-width:320px;font-feature-settings:"tnum"}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:var(--color-bg);border-bottom:1px solid var(--color-border);display:flex;align-items:center;padding:0 var(--sp-f);gap:var(--sp-d)}
+.nav-brand{display:flex;align-items:center;gap:var(--sp-b);font:800 15px/1 var(--font);white-space:nowrap}
+.nav-icon{width:32px;height:32px;border-radius:var(--radius-m);background:var(--color-interactive-brand);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-icon svg{width:17px;height:17px;fill:#fff}
+.nav-brand em{color:var(--color-brand-30);font-style:normal}
+.nav-spacer{flex:1}
+.nav-btn{background:var(--color-container-subtle);border:1px solid var(--color-border);border-radius:var(--radius-m);padding:var(--sp-b) var(--sp-d);font:700 13px/1 var(--font);color:var(--color-content);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:var(--sp-b);transition:border-color .15s,color .15s}
+.nav-btn:hover{border-color:var(--color-interactive-brand);color:var(--color-interactive-brand)}
+.nav-btn.icon-only{padding:var(--sp-b) 10px}
+.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--color-content)}
+.nav-hamburger svg{width:22px;height:22px;fill:currentColor}
+
+/* LAYOUT */
+.page-wrap{display:grid;grid-template-columns:var(--sb-w) minmax(0,1fr) var(--toc-w);max-width:1280px;margin:0 auto}
+
+/* LEFT SIDEBAR */
+.sidebar{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;padding:var(--sp-g) var(--sp-b) var(--sp-g) var(--sp-d);border-right:1px solid var(--color-border)}
+.snav-item{display:flex;align-items:center;gap:var(--sp-c);padding:var(--sp-c) var(--sp-c);border-radius:var(--radius-m);font:700 13px/1.4 var(--font);color:var(--color-content-sub);cursor:pointer;margin-bottom:4px;transition:background .12s,color .12s;user-select:none}
+.snav-item:hover{background:var(--color-container-subtle);color:var(--color-content)}
+.snav-item.active{background:var(--color-brand-tonal);color:var(--color-interactive-brand)}
+.snav-item .ico{font-size:16px;flex-shrink:0}
+
+/* MAIN */
+.main{padding:var(--sp-i) var(--sp-j) 80px;min-width:0}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;font:400 12px/1.4 var(--font);color:var(--color-content-sub);margin-bottom:var(--sp-d)}
+.breadcrumb a{font-weight:700;color:var(--color-content-sub)}
+.breadcrumb a:hover{color:var(--color-brand-30)}
+.bc-sep{color:var(--color-border)}
+.updated{font:400 12px/1 var(--font);color:var(--color-content-muted);margin-bottom:var(--sp-d)}
+
+/* PAGE TITLE — PIE $font-heading-l */
+.page-title{font:700 clamp(22px,3vw,28px)/1.2 var(--font);letter-spacing:0;color:var(--color-content);margin-bottom:var(--sp-c)}
+.title-meta{display:flex;align-items:center;gap:var(--sp-c);margin-bottom:var(--sp-i)}
+
+/* PIE TAG — full-rounded */
+.pie-tag{display:inline-flex;align-items:center;background:var(--color-brand-tonal);color:var(--color-brand-text);font:700 11px/1 var(--font);padding:4px var(--sp-c);border-radius:var(--radius-full);letter-spacing:0}
+.pie-tag.positive{background:var(--color-positive-tonal);color:var(--color-positive)}
+.read-time{font:700 12px/1 var(--font);color:var(--color-content-muted)}
+
+/* SECTIONS */
+.section{margin-bottom:var(--sp-j)}
+.section-title{font:700 clamp(17px,2.2vw,20px)/1.25 var(--font);color:var(--color-content);padding-bottom:var(--sp-c);margin-bottom:var(--sp-e);border-bottom:2px solid var(--color-border);letter-spacing:0}
+.pie-eyebrow{font:700 11px/1 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-brand-30);margin-bottom:var(--sp-c)}
+p{font:400 14px/1.75 var(--font);color:var(--color-content-sub);margin-bottom:var(--sp-d)}
+hr.divider{border:none;border-top:1px solid var(--color-divider);margin:var(--sp-j) 0}
+
+/* PIE NOTIFICATION */
+.pie-notification{background:var(--color-brand-tonal);border-left:4px solid var(--color-interactive-brand);border-radius:0 var(--radius-m) var(--radius-m) 0;padding:var(--sp-d) var(--sp-f);font:700 13.5px/1.5 var(--font);color:var(--color-content);margin-bottom:var(--sp-f)}
+.pie-notification a{color:var(--color-interactive-brand);text-decoration:underline}
+
+/* PIE DATA TABLE */
+.table-wrap{width:100%;overflow-x:auto;border-radius:var(--radius-l);border:1px solid var(--color-border);box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:var(--sp-g);-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font:400 13.5px/1.5 var(--font)}
+thead tr{background:var(--color-container-dark)}
+thead th{padding:var(--sp-c) var(--sp-d);text-align:left;font:700 11px/1 var(--font);letter-spacing:.05em;text-transform:uppercase;color:var(--color-content-inverse);white-space:nowrap}
+thead th:first-child{border-radius:calc(var(--radius-l) - 1px) 0 0 0}
+thead th:last-child{border-radius:0 calc(var(--radius-l) - 1px) 0 0}
+tbody tr{border-bottom:1px solid var(--color-border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:nth-child(even){background:var(--color-container-subtle)}
+tbody tr:hover{background:#F5F5F5}
+tbody td{padding:var(--sp-c) var(--sp-d);color:var(--color-content-sub);vertical-align:top;line-height:1.6}
+tbody td:first-child{font-weight:700;color:var(--color-content);white-space:nowrap}
+.practices-tbl thead tr{background:var(--color-interactive-brand)}
+
+/* PIE BADGE */
+.pie-badge{display:inline-flex;align-items:center;padding:2px var(--sp-b);border-radius:var(--radius-full);font:700 11px/1 var(--font);white-space:nowrap}
+.badge-positive{background:var(--color-positive-tonal);color:var(--color-positive)}
+.badge-brand{background:var(--color-brand-tonal);color:var(--color-brand-text)}
+
+/* TABLE LINK */
+.table-link{color:var(--color-brand-30);font-weight:700;white-space:nowrap}
+.table-link:hover{text-decoration:underline}
+
+/* TABS */
+.resp-tabs{border:1px solid var(--color-border);border-radius:var(--radius-l);overflow:hidden;margin-bottom:var(--sp-g);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.resp-tab-bar{display:flex;background:var(--color-container-subtle);border-bottom:1px solid var(--color-border)}
+.resp-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--sp-b);padding:var(--sp-d);font:700 13.5px/1 var(--font);color:var(--color-content-sub);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+.resp-tab:hover{color:var(--color-content);background:var(--color-container-strong)}
+.resp-tab.active{color:var(--color-content);border-bottom-color:var(--color-interactive-brand);background:var(--color-bg);font-weight:800}
+.tab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-brand{background:var(--color-interactive-brand)}
+.dot-positive{background:var(--color-positive)}
+.resp-tab-panel{display:block}
+.resp-tab-panel.hidden{display:none}
+.resp-tab-panel .table-wrap{border:none;border-radius:0;box-shadow:none;margin-bottom:0}
+.resp-tab-panel .table-wrap thead th:first-child,.resp-tab-panel .table-wrap thead th:last-child{border-radius:0}
+.tab-note{padding:var(--sp-c) var(--sp-f);font:700 13px/1.6 var(--font);border-top:1px solid var(--color-border)}
+.tab-note a{color:var(--color-brand-30);text-decoration:underline}
+.tab-note-brand{background:var(--color-brand-tonal);color:var(--color-brand-text)}
+.tab-note-positive{background:var(--color-positive-tonal);color:#145C33}
+
+/* FRAUD CARDS */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-c);margin-bottom:var(--sp-f)}
+.check-card{background:var(--color-container-subtle);border:1px solid var(--color-border);border-radius:var(--radius-l);padding:var(--sp-d);display:flex;align-items:flex-start;gap:var(--sp-c)}
+.check-card.full{grid-column:1/-1}
+.check-num{width:28px;height:28px;flex-shrink:0;background:var(--color-interactive-brand);color:#fff;border-radius:var(--radius-m);display:flex;align-items:center;justify-content:center;font:700 12px/1 var(--font)}
+.check-title{font:700 13px/1.4 var(--font);color:var(--color-content);margin-bottom:2px}
+.check-desc{font:400 12px/1.5 var(--font);color:var(--color-content-muted)}
+
+/* DOWNLOAD CARD */
+.download-card{background:var(--color-brand-tonal);border:1px solid var(--color-brand-10);border-radius:var(--radius-l);padding:var(--sp-f);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-e);margin-bottom:var(--sp-g);flex-wrap:wrap}
+.dl-text strong{display:block;font:700 15px/1.3 var(--font);color:var(--color-content);margin-bottom:4px}
+.dl-text span{font:400 13.5px/1 var(--font);color:var(--color-content-sub)}
+
+/* PIE BUTTONS */
+.pie-btn-primary{background:var(--color-interactive-brand);color:#fff;border:none;border-radius:var(--radius-full);padding:var(--sp-d) var(--sp-f);font:800 15px/1 var(--font);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:var(--sp-b);flex-shrink:0;transition:background .15s}
+.pie-btn-primary:hover{background:#D45B04}
+.pie-btn-secondary{background:transparent;color:var(--color-content);border:2px solid var(--color-container-dark);border-radius:var(--radius-full);padding:calc(var(--sp-d) - 2px) calc(var(--sp-f) - 2px);font:700 13px/1 var(--font);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:var(--sp-b);transition:background .15s}
+.pie-btn-secondary:hover{background:var(--color-container-subtle)}
+
+/* HELPFUL */
+.helpful{border:1px solid var(--color-border);border-radius:var(--radius-l);padding:var(--sp-f);text-align:center;margin-bottom:var(--sp-i)}
+.helpful strong{display:block;font:700 15px/1.3 var(--font);color:var(--color-content);margin-bottom:var(--sp-d)}
+.helpful-btns{display:flex;gap:var(--sp-c);justify-content:center;flex-wrap:wrap}
+
+/* RELATED */
+.related-title{font:700 18px/1.3 var(--font);color:var(--color-content);margin-bottom:var(--sp-f)}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-d)}
+.related-card{border:1px solid var(--color-border);border-radius:var(--radius-l);overflow:hidden;cursor:pointer;transition:box-shadow .18s,transform .18s}
+.related-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.10);transform:translateY(-2px)}
+.related-thumb{width:100%;height:112px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.related-body{padding:var(--sp-d)}
+.related-meta{display:flex;align-items:center;margin-bottom:var(--sp-b)}
+.related-mins{font:700 11px/1 var(--font);color:var(--color-content-muted);margin-left:auto}
+.related-card h4{font:700 14px/1.4 var(--font);margin-bottom:var(--sp-b)}
+.related-card p{font:400 12.5px/1.5 var(--font);margin-bottom:var(--sp-c);color:var(--color-content-sub)}
+
+/* TOC */
+.toc{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;padding:var(--sp-g) var(--sp-f) var(--sp-g) var(--sp-d)}
+.toc-heading{font:700 11px/1 var(--font);letter-spacing:.07em;text-transform:uppercase;color:var(--color-content);margin-bottom:var(--sp-d)}
+.toc-link{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-c) 0;border-bottom:1px solid var(--color-border);font:700 13px/1.4 var(--font);color:var(--color-content-sub);cursor:pointer;transition:color .12s}
+.toc-link:hover{color:var(--color-brand-30)}
+.toc-arr{font-size:11px;color:var(--color-border);flex-shrink:0}
+
+/* FOOTER */
+footer{border-top:1px solid var(--color-border);padding:var(--sp-e) var(--sp-f);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-c);font:400 12px/1 var(--font);color:var(--color-content-muted)}
+.footer-brand{display:flex;align-items:center;gap:var(--sp-b);font:700 13px/1 var(--font);color:var(--color-brand-30)}
+.footer-brand-icon{width:22px;height:22px;border-radius:var(--radius-s);background:var(--color-interactive-brand);display:flex;align-items:center;justify-content:center}
+.footer-brand-icon svg{width:12px;height:12px;fill:#fff}
+.footer-links{display:flex;gap:var(--sp-e);flex-wrap:wrap}
+.footer-links a{color:var(--color-content-muted);font-weight:700}
+.footer-links a:hover{color:var(--color-brand-30)}
+
+/* DRAWER */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:268px;background:var(--color-bg);z-index:301;padding:var(--sp-e) var(--sp-d);transform:translateX(-100%);transition:transform .25s ease;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-overlay.open{display:block}
+.drawer-close{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-e)}
+.drawer-close-btn{background:none;border:none;cursor:pointer;font-size:20px;color:var(--color-content-sub);padding:4px}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.page-wrap{grid-template-columns:var(--sb-w) minmax(0,1fr)}.toc{display:none}}
+@media(max-width:780px){.page-wrap{grid-template-columns:minmax(0,1fr)}.sidebar{display:none}.main{padding:var(--sp-f) var(--sp-e) var(--sp-j)}.nav-hamburger{display:flex}.check-grid{grid-template-columns:1fr}.check-card.full{grid-column:1}.download-card{flex-direction:column;align-items:flex-start}.resp-tab{font-size:12px;padding:var(--sp-c) var(--sp-b)}}
+@media(max-width:520px){.related-grid{grid-template-columns:1fr}.nav-btn:not(.icon-only){display:none}.helpful-btns{flex-direction:column;align-items:stretch}.helpful-btns button{justify-content:center}footer{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="nav-hamburger" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+  </button>
+  <div class="nav-brand">
+    <div class="nav-icon"><svg viewBox="0 0 20 20"><path d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 10 4zm0 2a1 1 0 0 1 1 1v3.382l1.723.862a1 1 0 1 1-.894 1.789L9.553 11.894A1 1 0 0 1 9 11V9a1 1 0 0 1 1-1z"/></svg></div>
+    Knowledge&nbsp;<em>Centre</em>
+  </div>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2h14v2H1zm0 5h14v2H1zm0 5h14v2H1z"/></svg> More from Just Eat</button>
+  <button class="nav-btn icon-only" aria-label="Search"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zM6.5 11a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></button>
+  <button class="nav-btn icon-only" aria-label="Language">🌐</button>
+</nav>
+
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-close">
+    <div class="nav-brand" style="font-size:14px">
+      <div class="nav-icon" style="width:26px;height:26px;border-radius:6px"><svg viewBox="0 0 20 20" style="width:13px;height:13px;fill:#fff"><path d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 10 4zm0 2a1 1 0 0 1 1 1v3.382l1.723.862a1 1 0 1 1-.894 1.789L9.553 11.894A1 1 0 0 1 9 11V9a1 1 0 0 1 1-1z"/></svg></div>
+      Knowledge&nbsp;<em style="color:var(--color-brand-30);font-style:normal">Centre</em>
+    </div>
+    <button class="drawer-close-btn" id="closeBtn" aria-label="Close menu">✕</button>
+  </div>
+  <div class="snav-item active"><span class="ico">🏠</span> Home</div>
+  <div class="snav-item"><span class="ico">👤</span> Account</div>
+  <div class="snav-item"><span class="ico">📢</span> Marketing</div>
+  <div class="snav-item"><span class="ico">📦</span> Orders</div>
+  <div class="snav-item" style="margin-top:12px"><span class="ico">❓</span> Help</div>
+</div>
+
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="snav-item active"><span class="ico">🏠</span> Home</div>
+    <div class="snav-item"><span class="ico">👤</span> Account</div>
+    <div class="snav-item"><span class="ico">📢</span> Marketing</div>
+    <div class="snav-item"><span class="ico">📦</span> Orders</div>
+    <div class="snav-item" style="margin-top:12px"><span class="ico">❓</span> Help</div>
+  </aside>
+
+  <main class="main" id="main-content">
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="#">Home</a><span class="bc-sep">/</span>
+      <a href="#">Your business</a><span class="bc-sep">/</span>
+      <span>Understanding refunds</span>
+    </nav>
+
+    <p class="updated">Updated 4:35PM, 23 Mar 2026</p>
+    <h1 class="page-title">Understanding refunds: how we protect your business</h1>
+    <div class="title-meta">
+      <span class="pie-tag">Management</span>
+      <span class="read-time">2 mins</span>
+    </div>
+
+    <!-- S1 -->
+    <section class="section" id="s-understand">
+      <h2 class="section-title">Understanding refunds</h2>
+
+      <div class="pie-notification">
+        📋 This guide is for Just Eat partners who use <strong>Just Eat drivers</strong>. If you deliver yourself, <a href="#">click here</a>.
+      </div>
+
+      <p>We know refunds are a concern for partners. You've told us you need more transparency about how our refund process works and the steps we've taken to ensure fairness.</p>
+      <p>We've produced a new guide that explains our systems, protections, and best practices to help you reduce refund-related costs. Download the full guide below, or read the summary here.</p>
+
+      <div class="pie-eyebrow">At a glance</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Topic</th><th>What it covers</th><th>Who it affects</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#s-process" class="table-link">Refund responsibility ↓</a></td><td>Who pays for which type of claim</td><td>All partners</td></tr>
+            <tr><td><a href="#s-fraud" class="table-link">Fraud prevention ↓</a></td><td>How our system detects and blocks false claims</td><td>All partners</td></tr>
+            <tr><td><a href="#s-practices" class="table-link">Best practices ↓</a></td><td>Steps to reduce your refund exposure</td><td>All partners</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S2 -->
+    <section class="section" id="s-process">
+      <h2 class="section-title">How refunds are processed</h2>
+
+      <p>You're only charged for refunds when the issue is within your control. For orders where Just Eat completed delivery, we cover delivery-related refunds. Issues like missing items, incorrect orders, or food safety concerns are your responsibility, while courier-related problems are ours.</p>
+
+      <div class="pie-eyebrow">Refund responsibility</div>
+
+      <div class="resp-tabs">
+        <div class="resp-tab-bar" role="tablist">
+          <button class="resp-tab active" role="tab" id="tab-yours" data-tab="yours" aria-selected="true" aria-controls="panel-yours">
+            <span class="tab-dot dot-brand"></span> Your responsibility
+          </button>
+          <button class="resp-tab" role="tab" id="tab-ours" data-tab="ours" aria-selected="false" aria-controls="panel-ours">
+            <span class="tab-dot dot-positive"></span> We cover this
+          </button>
+        </div>
+
+        <div class="resp-tab-panel" id="panel-yours" role="tabpanel" aria-labelledby="tab-yours">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Issue type</th><th>Examples</th><th>Who is charged</th></tr></thead>
+              <tbody>
+                <tr><td>Food quality / accuracy</td><td>Missing items, incorrect orders, food safety concerns</td><td>Partner</td></tr>
+                <tr><td>Delivery — partner courier</td><td>Courier issues when you self-deliver</td><td>Partner</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-note tab-note-brand">💡 You are charged for these refunds because the issue falls within your control. Review our <a href="#s-practices">best practices</a> below to reduce your exposure.</div>
+        </div>
+
+        <div class="resp-tab-panel hidden" id="panel-ours" role="tabpanel" aria-labelledby="tab-ours">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Issue type</th><th>Examples</th><th>Who is charged</th></tr></thead>
+              <tbody>
+                <tr><td>Delivery — Just Eat courier</td><td>Late delivery, courier damage, lost order</td><td>Just Eat</td></tr>
+                <tr><td>Confirmed fraud</td><td>False claims detected by our system</td><td>Nobody — reversed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-note tab-note-positive">✅ You are <strong>not</strong> charged for these refunds. Just Eat absorbs delivery-related costs and automatically reverses confirmed fraudulent claims.</div>
+        </div>
+      </div>
+
+      <div class="pie-eyebrow" id="s-fraud">Fraud protection: built to protect your margins</div>
+      <p>Our refund process balances customer protection with partner fairness. When a customer reports an issue, every claim passes through our multi-layered fraud prevention system. High-risk cases are escalated to our specialist fraud investigation team for manual review.</p>
+      <p>Our data-led fraud prevention system uses sophisticated checks across five signal categories. Confirmed fraud is blocked, reversed, and fed back into our detection models to improve accuracy continuously.</p>
+
+      <div class="check-grid">
+        <div class="check-card"><div class="check-num">1</div><div><div class="check-title">Customer identity &amp; behavioural analytics</div><div class="check-desc">Flags unusual account activity and patterns</div></div></div>
+        <div class="check-card"><div class="check-num">2</div><div><div class="check-title">Order patterns</div><div class="check-desc">Cross-references order history against claim frequency</div></div></div>
+        <div class="check-card"><div class="check-num">3</div><div><div class="check-title">Refund velocity</div><div class="check-desc">Detects customers making excessive refund requests</div></div></div>
+        <div class="check-card"><div class="check-num">4</div><div><div class="check-title">Photo evidence</div><div class="check-desc">Customers must submit visual proof for certain claims</div></div></div>
+        <div class="check-card full"><div class="check-num">5</div><div><div class="check-title">GPS trails &amp; chat logs</div><div class="check-desc">Delivery route and communication records used to verify or dispute claims</div></div></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S3 -->
+    <section class="section" id="s-practices">
+      <h2 class="section-title">Best practices to reduce refunds</h2>
+      <p>Small operational changes can significantly reduce your refund exposure. The table below outlines recommended actions by category, each rated by its likely impact on your refund rate.</p>
+      <div class="table-wrap">
+        <table class="practices-tbl">
+          <thead><tr><th>Category</th><th>Recommended action</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Menu accuracy</td><td>Use real photos and accurate descriptions on your menu</td><td><span class="pie-badge badge-positive">High</span></td></tr>
+            <tr><td>Stock management</td><td>Mark items out of stock promptly to avoid substitution disputes</td><td><span class="pie-badge badge-positive">High</span></td></tr>
+            <tr><td>Menu structure</td><td>Build combo meals to show sub-items for clearer refund allocation</td><td><span class="pie-badge badge-brand">Medium</span></td></tr>
+            <tr><td>Packaging — temperature</td><td>Package cold items separately from hot food to prevent damage</td><td><span class="pie-badge badge-brand">Medium</span></td></tr>
+            <tr><td>Packaging — bulky items</td><td>Ensure drivers collect bulky items left outside main packaging</td><td><span class="pie-badge badge-brand">Medium</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="download-card">
+      <div class="dl-text">
+        <strong>Download the complete refunds guide</strong>
+        <span>Full version with detailed examples, case studies, and partner FAQs.</span>
+      </div>
+      <button class="pie-btn-primary">⬇&nbsp; Download complete guide</button>
+    </div>
+
+    <div class="helpful">
+      <strong>Was this helpful?</strong>
+      <div class="helpful-btns">
+        <button class="pie-btn-secondary">👍 Yes, thanks</button>
+        <button class="pie-btn-secondary">👎 Not really</button>
+      </div>
+    </div>
+
+    <div class="related-title">Related Articles</div>
+    <div class="related-grid">
+      <div class="related-card">
+        <div class="related-thumb" style="background:var(--color-brand-tonal)">📱</div>
+        <div class="related-body">
+          <div class="related-meta"><span class="pie-tag" style="font-size:10px">Management</span><span class="related-mins">5 mins</span></div>
+          <h4>How to update your menu</h4>
+          <p>From price changes to adding a meal deal, find out all the ways to update your menu here.</p>
+          <button class="pie-btn-secondary" style="font-size:12px;padding:6px 14px">View article</button>
+        </div>
+      </div>
+      <div class="related-card">
+        <div class="related-thumb" style="background:var(--color-positive-tonal)">🍳</div>
+        <div class="related-body">
+          <div class="related-meta"><span class="pie-tag positive" style="font-size:10px">Business growth</span><span class="related-mins">2 mins</span></div>
+          <h4>Tips for successful orders</h4>
+          <p>Simple steps to improve order accuracy, customer satisfaction, and your rating.</p>
+          <button class="pie-btn-secondary" style="font-size:12px;padding:6px 14px">View article</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="toc">
+    <div class="toc-heading">On this page</div>
+    <a class="toc-link" href="#s-understand">Understanding refunds <span class="toc-arr">⇢</span></a>
+    <a class="toc-link" href="#s-process">How refunds are processed <span class="toc-arr">⇢</span></a>
+    <a class="toc-link" href="#s-practices">Best practices to reduce refunds <span class="toc-arr">⇢</span></a>
+  </aside>
+
+</div>
+
+<footer>
+  <div class="footer-brand">
+    <div class="footer-brand-icon"><svg viewBox="0 0 20 20"><path d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 10 4zm0 2a1 1 0 0 1 1 1v3.382l1.723.862a1 1 0 1 1-.894 1.789L9.553 11.894A1 1 0 0 1 9 11V9a1 1 0 0 1 1-1z"/></svg></div>
+    JUST EAT
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy policy</a>
+    <a href="#">Cookie statement</a>
+    <a href="#">Terms and conditions</a>
+  </div>
+  <span>© 2025 Just Eat Takeaway.com</span>
+</footer>
+
+<script>
+const menuBtn=document.getElementById('menuBtn'),closeBtn=document.getElementById('closeBtn'),drawer=document.getElementById('drawer'),overlay=document.getElementById('overlay');
+function openDrawer(){drawer.classList.add('open');overlay.classList.add('open');document.body.style.overflow='hidden';menuBtn.setAttribute('aria-expanded','true')}
+function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';menuBtn.setAttribute('aria-expanded','false')}
+menuBtn.addEventListener('click',openDrawer);
+closeBtn.addEventListener('click',closeDrawer);
+overlay.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+
+document.querySelectorAll('.resp-tabs').forEach(tabs=>{
+  tabs.querySelectorAll('.resp-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      const t=tab.dataset.tab;
+      tabs.querySelectorAll('.resp-tab').forEach(b=>{b.classList.toggle('active',b===tab);b.setAttribute('aria-selected',String(b===tab))});
+      tabs.querySelectorAll('.resp-tab-panel').forEach(p=>{p.classList.toggle('hidden',p.id!=='panel-'+t)});
+    });
+  });
+});
+</script>
+
+<!-- PIE Critical FOFT: lazy-load Bold & ExtraBold via Font Loading API -->
+<script>
+(function () {
+  var CDN = 'https://d30v2pzvrfyzpo.cloudfront.net/fonts/';
+  var boldSrc      = 'url("' + CDN + 'JETSansDigital-Bold-optimised.woff2") format("woff2"), url("' + CDN + 'JETSansDigital-Bold-optimised.woff") format("woff")';
+  var extraboldSrc = 'url("' + CDN + 'JETSansDigital-ExtraBold-optimised.woff2") format("woff2"), url("' + CDN + 'JETSansDigital-ExtraBold-optimised.woff") format("woff")';
+
+  if ('fonts' in document) {
+    var bold      = new FontFace('JETSansDigital', boldSrc,      { weight: '700' });
+    var extrabold = new FontFace('JETSansDigital', extraboldSrc, { weight: '800' });
+    Promise.all([bold.load(), extrabold.load()]).then(function (fonts) {
+      fonts.forEach(function (font) { document.fonts.add(font); });
+      document.documentElement.classList.add('webfonts-loaded');
+    });
+  }
+})();
+</script>
+</body>
+</html>
