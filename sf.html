@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SalesForce — Cuisine Tagging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f11;
+  --surface: #17171a;
+  --surface2: #1f1f23;
+  --border: rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.14);
+  --text-primary: #f0eff5;
+  --text-secondary: #9190a0;
+  --text-muted: #5a5970;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+/* ── back nav ── */
+.back-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-strong);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  transition: color 0.15s, border-color 0.15s;
+}
+.back-link:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.3); }
+.back-link svg { width: 13px; height: 13px; flex-shrink: 0; }
+.back-nav-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── page content ── */
+.page-wrap { padding: 48px 32px 64px; max-width: 900px; margin: 0 auto; }
+.page-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+.page-title { font-size: 22px; font-weight: 600; margin-bottom: 32px; color: var(--text-primary); }
+
+/* ── SalesForce UI ── */
+.sf-root{font-family:'Salesforce Sans',-apple-system,sans-serif;background:#fff;border:1px solid #dddbda;border-radius:4px;overflow:hidden}
+.sf-section-header{background:#f3f3f3;border-bottom:1px solid #dddbda;padding:8px 16px;display:flex;align-items:center;gap:8px}
+.sf-section-title{font-size:13px;font-weight:700;color:#3e3e3c;text-transform:uppercase;letter-spacing:.04em}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;padding:0}
+.sf-col{padding:12px 16px 0;border-right:1px solid #f3f3f3}
+.sf-col:last-child{border-right:none}
+.sf-field{margin-bottom:14px}
+.sf-label{font-size:12px;color:#706e6b;font-weight:400;margin-bottom:3px;display:block}
+.sf-label .sf-info{display:inline-block;width:13px;height:13px;border-radius:50%;background:#706e6b;color:#fff;font-size:9px;text-align:center;line-height:13px;margin-left:3px;vertical-align:middle;cursor:help}
+.sf-select-wrap{position:relative}
+.sf-select{width:100%;appearance:none;-webkit-appearance:none;background:#fff;border:1px solid #dddbda;border-radius:4px;padding:5px 28px 5px 8px;font-size:13px;color:#3e3e3c;cursor:pointer;font-family:inherit;height:30px;outline:none}
+.sf-select:focus{border-color:#1589ee;box-shadow:0 0 3px rgba(21,137,238,.5)}
+.sf-select-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;color:#706e6b;font-size:11px}
+.sf-dep-link{font-size:11px;color:#c2651a;cursor:pointer;display:block;margin-top:2px}
+.sf-dualbox{display:flex;align-items:stretch}
+.sf-dualbox-col{display:flex;flex-direction:column;flex:1;min-width:0}
+.sf-dualbox-label{font-size:11px;color:#706e6b;margin-bottom:3px}
+.sf-dualbox-list{border:1px solid #dddbda;border-radius:4px;background:#fff;height:100px;overflow-y:auto;font-size:13px}
+.sf-dualbox-item{padding:5px 8px;cursor:pointer;color:#3e3e3c}
+.sf-dualbox-item:hover{background:#f3f3f3}
+.sf-dualbox-item.sf-sel{background:#0070d2;color:#fff}
+.sf-dualbox-arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:0 5px}
+.sf-dualbox-btn{background:#fff;border:1px solid #dddbda;border-radius:4px;width:22px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3e3e3c;padding:0}
+.sf-dualbox-btn:hover{background:#f3f3f3}
+.sf-tag-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;min-height:22px}
+.sf-tag{display:flex;align-items:center;gap:4px;background:#e8f4ff;border:1px solid #c9e0f5;border-radius:3px;padding:1px 6px;font-size:11px;color:#0070d2;font-weight:500}
+.sf-tag-x{background:none;border:none;cursor:pointer;color:#0070d2;font-size:12px;padding:0;line-height:1}
+.sf-mission-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid #dddbda;border-radius:4px;background:#fff;padding:4px 0}
+.sf-mission-item{display:flex;align-items:center;gap:7px;padding:3px 10px;cursor:pointer;font-size:13px;color:#3e3e3c}
+.sf-mission-item:hover{background:#f3f3f3}
+.sf-mission-item input[type=checkbox]{accent-color:#0070d2;width:13px;height:13px;cursor:pointer;flex-shrink:0}
+.sf-divider{border:none;border-top:1px solid #e8e8e8;margin:4px 0 12px}
+.sf-bottom-pad{height:16px}
+</style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="cuisine-tagging-blueprint.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+    Service Blueprint
+  </a>
+  <span class="back-nav-label">SalesForce · Cuisine &amp; Tag Information</span>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-eyebrow">SalesForce · Cuisine &amp; Tag Information</div>
+  <h2 class="page-title">Account record</h2>
+
+  <div class="sf-root">
+    <div class="sf-section-header">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect width="14" height="14" rx="2" fill="#706e6b"/><path d="M4 5h6M4 7.5h6M4 10h4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span class="sf-section-title">Cuisine &amp; Tag Information</span>
+    </div>
+    <div class="sf-grid">
+      <div class="sf-col">
+        <div class="sf-field">
+          <label class="sf-label">Partner Type (Establishment Type)</label>
+          <div class="sf-select-wrap"><select class="sf-select"><option value="">--None--</option><option>Restaurant</option><option>Grocery</option><option>Convenience</option><option>Drugstore</option></select><span class="sf-select-arrow">&#9660;</span></div>
+        </div>
+        <hr class="sf-divider"/>
+        <div class="sf-field">
+          <label class="sf-label">Primary Cuisine</label>
+          <div class="sf-select-wrap">
+            <select class="sf-select" id="sf2-primary" onchange="sf2HandlePrimary(this)">
+              <option value="">--None--</option>
+              <optgroup label="Takeaway Favourites"><option>Burger</option><option>Pizza</option><option>Chicken</option><option>Kebab</option><option>Mixed Takeaway</option></optgroup>
+              <optgroup label="Americas"><option>Grillhouse / BBQ</option><option>Caribbean</option><option>Mexican</option></optgroup>
+              <optgroup label="Asian"><option>Chinese</option><option>Indian</option><option>Japanese</option><option>Korean</option><option>Thai</option><option>Sushi</option><option>Pan-Asian</option><option>South Asian</option></optgroup>
+              <optgroup label="Middle Eastern &amp; Africa"><option>African</option><option>Middle Eastern</option></optgroup>
+              <optgroup label="UK &amp; European"><option>British</option><option>Continental European</option><option>Italian</option><option>Greek</option></optgroup>
+              <optgroup label="Lifestyle"><option>Breakfast</option><option>Cafe / Drinks</option><option>Desserts</option><option>Healthy / Bowls</option><option>Sandwiches</option></optgroup>
+            </select><span class="sf-select-arrow">&#9660;</span>
+          </div>
+          <span class="sf-dep-link">View all dependencies</span>
+        </div>
+        <div class="sf-field">
+          <label class="sf-label">Dynamic Speciality Cuisine</label>
+          <div class="sf-select-wrap"><select class="sf-select" id="sf2-specialty"><option value="">--None--</option></select><span class="sf-select-arrow">&#9660;</span></div>
+          <span class="sf-dep-link">View all dependencies</span>
+        </div>
+        <div class="sf-field">
+          <label class="sf-label">Dietary Restrictions</label>
+          <div class="sf-dualbox">
+            <div class="sf-dualbox-col">
+              <div class="sf-dualbox-label">Available</div>
+              <div class="sf-dualbox-list" id="sf2-avail">
+                <div class="sf-dualbox-item" onclick="sf2DietClick('avail',this)">Vegan Only</div>
+                <div class="sf-dualbox-item" onclick="sf2DietClick('avail',this)">Vegetarian Only</div>
+                <div class="sf-dualbox-item" onclick="sf2DietClick('avail',this)">100% Halal</div>
+                <div class="sf-dualbox-item" onclick="sf2DietClick('avail',this)">100% Kosher</div>
+              </div>
+            </div>
+            <div class="sf-dualbox-arrows">
+              <button class="sf-dualbox-btn" onclick="sf2DietMove('right')">&#9654;</button>
+              <button class="sf-dualbox-btn" onclick="sf2DietMove('left')">&#9664;</button>
+            </div>
+            <div class="sf-dualbox-col">
+              <div class="sf-dualbox-label">Chosen</div>
+              <div class="sf-dualbox-list" id="sf2-chosen"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sf-col">
+        <div class="sf-field">
+          <label class="sf-label">Mission Tags <span class="sf-info" title="Select all occasions that apply">i</span></label>
+          <div class="sf-mission-grid">
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Value</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Premium</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Healthy</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Family Meal</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Late Night</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Lunch</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Breakfast</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Treat</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Comfort Food</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Group Order</label>
+            <label class="sf-mission-item"><input type="checkbox" onchange="sf2MissionChange()"> Sharing</label>
+          </div>
+          <div class="sf-tag-row" id="sf2-mission-tags"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sf-bottom-pad"></div>
+  </div>
+</div>
+
+<script>
+const sf2Map = {
+  'Burger':['Fast Food','Gourmet','Smash','Vegan'],'Pizza':['American','Italian'],'Chicken':['Chicken Wings','Fried Chicken','Peri Peri','Grilled Chicken'],'Kebab':['Doner','Gyros','Shish','Mixed Grill','Wraps / Shawarma'],'Mixed Takeaway':['Pizza & Kebab','Burger & Chicken','Chicken and Kebab','Mixed Fast Food'],'Grillhouse / BBQ':['BBQ','Steak','Ribs'],'Mexican':['Tacos','Burritos','Tex-Mex'],'Chinese':['Classic Takeaway','Dim Sum','Cantonese','Szechuan'],'Indian':['Curry House','North Indian','Punjabi','South Indian'],'Japanese':['Noodles','Ramen'],'Korean':['Korean Fried Chicken','Korean BBQ'],'Thai':['Thai Street Food','Thai Curry'],'Pan-Asian':['Indonesian','Indo-Chinese','Malaysian','Filipino','Vietnamese'],'South Asian':['Bangladeshi','Pakistani','Nepalese','Sri Lankan'],'African':['African Grill','Ethiopian','Ghanaian','Nigerian','South African'],'Middle Eastern':['Iranian','Persian','Lebanese','Egyptian','Moroccan','Turkish'],'British':['Fish and Chips','Pub Food','Carvery / Roast Dinner'],'Continental European':['Balkan','French','German','Portuguese','Polish','Spanish'],'Italian':['Pasta','Pizza and Pasta','Italian Dining'],'Greek':['Greek Grill','Meze'],'Cafe / Drinks':['Bakery','Bubble Tea','Cafe','Coffee','Smoothies'],'Desserts':['Ice Cream','Pancakes / Waffles'],'Healthy / Bowls':['Poke','Protein Bowls','Rice Bowls','Salads'],'Sandwiches':['Bagels','Deli','Wraps']
+};
+function sf2HandlePrimary(sel) {
+  const sc = document.getElementById('sf2-specialty');
+  const opts = sf2Map[sel.value] || [];
+  sc.innerHTML = '<option value="">--None--</option>';
+  opts.forEach(o => { const op = document.createElement('option'); op.value = op.textContent = o; sc.appendChild(op); });
+}
+let sf2AvailSel = null, sf2ChosenSel = null;
+function sf2DietClick(side, el) {
+  const lid = side === 'avail' ? 'sf2-avail' : 'sf2-chosen';
+  document.querySelectorAll('#' + lid + ' .sf-dualbox-item').forEach(i => i.classList.remove('sf-sel'));
+  el.classList.add('sf-sel');
+  if (side === 'avail') { sf2AvailSel = el; sf2ChosenSel = null; }
+  else { sf2ChosenSel = el; sf2AvailSel = null; }
+}
+function sf2DietMove(dir) {
+  if (dir === 'right' && sf2AvailSel) {
+    const c = document.getElementById('sf2-chosen');
+    const cl = sf2AvailSel.cloneNode(true); cl.classList.remove('sf-sel'); cl.onclick = function(){ sf2DietClick('chosen',this); }; c.appendChild(cl); sf2AvailSel.remove(); sf2AvailSel = null;
+  } else if (dir === 'left' && sf2ChosenSel) {
+    const a = document.getElementById('sf2-avail');
+    const cl = sf2ChosenSel.cloneNode(true); cl.classList.remove('sf-sel'); cl.onclick = function(){ sf2DietClick('avail',this); };
+    const order=['Vegan Only','Vegetarian Only','100% Halal','100% Kosher'];
+    const items = Array.from(a.querySelectorAll('.sf-dualbox-item'));
+    const before = items.find(i => order.indexOf(i.textContent.trim()) > order.indexOf(cl.textContent.trim()));
+    before ? a.insertBefore(cl, before) : a.appendChild(cl); sf2ChosenSel.remove(); sf2ChosenSel = null;
+  }
+}
+function sf2MissionChange() {
+  const c = document.getElementById('sf2-mission-tags'); c.innerHTML = '';
+  document.querySelectorAll('.sf-mission-item input:checked').forEach(cb => {
+    const lbl = cb.parentElement.textContent.trim();
+    const t = document.createElement('span'); t.className = 'sf-tag';
+    t.innerHTML = lbl + '<button class="sf-tag-x" onclick="sf2RemoveMission(this,\'' + lbl + '\')">&#x2715;</button>'; c.appendChild(t);
+  });
+}
+function sf2RemoveMission(btn, lbl) {
+  document.querySelectorAll('.sf-mission-item input').forEach(cb => { if (cb.parentElement.textContent.trim() === lbl) cb.checked = false; }); btn.parentElement.remove();
+}
+</script>
+</body>
+</html>

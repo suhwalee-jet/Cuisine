@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JETMS · Tags</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f11;
+    --surface: #17171a;
+    --border: #2a2a2e;
+    --text-primary: #f0f0f2;
+    --text-muted: #6b6b72;
+    --accent: #f26522;
+    --mono: 'DM Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text-primary); min-height: 100vh; }
+
+  /* Back nav */
+  .back-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 24px;
+    height: 45px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color .15s;
+  }
+  .back-link:hover { color: var(--text-primary); }
+  .back-link svg { flex-shrink: 0; }
+  .back-nav-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  /* Page wrapper */
+  .page-wrap {
+    min-height: calc(100vh - 45px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 24px 64px;
+    background: var(--bg);
+  }
+  .page-inner {
+    width: 100%;
+    max-width: 700px;
+  }
+  .page-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+  }
+
+  /* JETMS component styles */
+  .jt { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; font-size: 14px; border-radius: 8px; }
+  .jt-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 24px; }
+  .jt-section-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; }
+  .jt-field { margin-bottom: 16px; }
+  .jt-field-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .jt-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .jt-counter { font-size: 12px; color: #888; }
+  .jt-counter.warn { color: #e67e22; font-weight: 600; }
+  .jt-tag-box { border: 1px solid #d0d0d0; border-radius: 6px; padding: 6px 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 40px; cursor: pointer; background: #fff; transition: border-color .15s; position: relative; }
+  .jt-tag-box:hover { border-color: #999; }
+  .jt-tag-box.open { border-color: #f26522; box-shadow: 0 0 0 2px rgba(242,101,34,.15); }
+  .jt-tag { display: inline-flex; align-items: center; gap: 5px; background: #1a1a1a; color: #fff; border-radius: 20px; padding: 3px 10px; font-size: 13px; font-weight: 500; white-space: nowrap; line-height: 1.4; }
+  .jt-tag-remove { background: none; border: none; color: #fff; cursor: pointer; font-size: 14px; padding: 0; line-height: 1; opacity: .7; display: flex; align-items: center; }
+  .jt-tag-remove:hover { opacity: 1; }
+  .jt-chevron { margin-left: auto; color: #555; font-size: 16px; flex-shrink: 0; padding-left: 4px; line-height: 1; }
+  .jt-placeholder { font-size: 14px; color: #aaa; }
+  .jt-dropdown { border: 1px solid #d0d0d0; border-radius: 6px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.10); margin-top: 2px; overflow: hidden; display: none; z-index: 10; position: relative; }
+  .jt-dropdown.visible { display: block; }
+  .jt-opt-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #aaa; padding: 8px 12px 4px; }
+  .jt-opt { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; cursor: pointer; font-size: 13px; color: #1a1a1a; border-bottom: .5px solid #f5f5f5; }
+  .jt-opt:last-child { border-bottom: none; }
+  .jt-opt:hover { background: #fdf4ef; }
+  .jt-opt.jt-sel { font-weight: 600; }
+  .jt-opt-check { color: #f26522; font-size: 14px; font-weight: 700; }
+  .jt-single-only { font-size: 11px; color: #f26522; background: #fff5ef; border: 1px solid #fcd4b5; border-radius: 10px; padding: 2px 8px; margin-left: 6px; font-weight: 600; white-space: nowrap; }
+  .jt-btn-row { display: flex; gap: 10px; margin-top: 24px; }
+  .jt-btn-save { background: #1a1a1a; color: #fff; border: none; border-radius: 6px; padding: 9px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .jt-btn-save:hover { background: #333; }
+  .jt-btn-cancel { background: none; color: #555; border: 1px solid #d0d0d0; border-radius: 6px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .jt-btn-cancel:hover { background: #f5f5f5; }
+</style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="cuisine-tagging-blueprint.html" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M5 12l7 7M5 12l7-7"/>
+    </svg>
+    Service Blueprint
+  </a>
+  <span class="back-nav-label">JETMS · Partner record</span>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-inner">
+    <div class="page-eyebrow">JETMS · Partner record</div>
+    <h1 class="page-title">Tags</h1>
+
+    <div class="jt">
+      <div class="jt-card">
+        <div class="jt-section-title">Tags</div>
+
+        <div class="jt-field">
+          <div class="jt-field-header">
+            <span class="jt-label">Cuisine (Primary) <span class="jt-single-only">1 max</span></span>
+            <span class="jt-counter" id="jt2-ctr-primary">0/1 selected</span>
+          </div>
+          <div class="jt-tag-box" id="jt2-box-primary" onclick="jt2ToggleDD('primary')">
+            <span class="jt-placeholder" id="jt2-ph-primary">Select primary cuisine</span>
+            <span class="jt-chevron">&#8964;</span>
+          </div>
+          <div class="jt-dropdown" id="jt2-dd-primary"></div>
+        </div>
+
+        <div class="jt-field">
+          <div class="jt-field-header">
+            <span class="jt-label">Cuisine (Dynamic Speciality) <span class="jt-single-only">1 max · optional</span></span>
+            <span class="jt-counter" id="jt2-ctr-specialty">0/1 selected</span>
+          </div>
+          <div class="jt-tag-box" id="jt2-box-specialty" onclick="jt2ToggleDD('specialty')" style="opacity:.5;pointer-events:none">
+            <span class="jt-placeholder" id="jt2-ph-specialty">Select primary cuisine first</span>
+            <span class="jt-chevron">&#8964;</span>
+          </div>
+          <div class="jt-dropdown" id="jt2-dd-specialty"></div>
+        </div>
+
+        <div class="jt-field">
+          <div class="jt-field-header">
+            <span class="jt-label">Dietary</span>
+          </div>
+          <div class="jt-tag-box" id="jt2-box-dietary" onclick="jt2ToggleDD('dietary')">
+            <span class="jt-placeholder" id="jt2-ph-dietary">Select dietary tags</span>
+            <span class="jt-chevron">&#8964;</span>
+          </div>
+          <div class="jt-dropdown" id="jt2-dd-dietary"></div>
+        </div>
+
+        <div class="jt-field">
+          <div class="jt-field-header">
+            <span class="jt-label">Mission</span>
+          </div>
+          <div class="jt-tag-box" id="jt2-box-mission" onclick="jt2ToggleDD('mission')">
+            <span class="jt-placeholder" id="jt2-ph-mission">Select mission tags</span>
+            <span class="jt-chevron">&#8964;</span>
+          </div>
+          <div class="jt-dropdown" id="jt2-dd-mission"></div>
+        </div>
+
+        <div class="jt-btn-row">
+          <button class="jt-btn-save">Save</button>
+          <button class="jt-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const jt2Map = {
+  'Burger':['Fast Food','Gourmet','Smash','Vegan'],'Pizza':['American','Italian'],'Chicken':['Chicken Wings','Fried Chicken','Peri Peri','Grilled Chicken'],'Kebab':['Doner','Gyros','Shish','Mixed Grill','Wraps / Shawarma'],'Mixed Takeaway':['Pizza & Kebab','Burger & Chicken','Chicken and Kebab','Mixed Fast Food'],'Grillhouse / BBQ':['BBQ','Steak','Ribs'],'Mexican':['Tacos','Burritos','Tex-Mex'],'Chinese':['Classic Takeaway','Dim Sum','Cantonese','Szechuan'],'Indian':['Curry House','North Indian','Punjabi','South Indian'],'Japanese':['Noodles','Ramen'],'Korean':['Korean Fried Chicken','Korean BBQ'],'Thai':['Thai Street Food','Thai Curry'],'Pan-Asian':['Indonesian','Indo-Chinese','Malaysian','Filipino','Vietnamese'],'South Asian':['Bangladeshi','Pakistani','Nepalese','Sri Lankan'],'African':['African Grill','Ethiopian','Ghanaian','Nigerian','South African'],'Middle Eastern':['Iranian','Persian','Lebanese','Egyptian','Moroccan','Turkish'],'British':['Fish and Chips','Pub Food','Carvery / Roast Dinner'],'Continental European':['Balkan','French','German','Portuguese','Polish','Spanish'],'Italian':['Pasta','Pizza and Pasta','Italian Dining'],'Greek':['Greek Grill','Meze'],'Cafe / Drinks':['Bakery','Bubble Tea','Cafe','Coffee','Smoothies'],'Desserts':['Ice Cream','Pancakes / Waffles'],'Healthy / Bowls':['Poke','Protein Bowls','Rice Bowls','Salads'],'Sandwiches':['Bagels','Deli','Wraps']
+};
+const jt2PrimaryGroups = [
+  {label:'Takeaway Favourites',options:['Burger','Pizza','Chicken','Kebab','Mixed Takeaway']},
+  {label:'Americas',options:['Grillhouse / BBQ','Caribbean','Mexican']},
+  {label:'Asian',options:['Chinese','Indian','Japanese','Korean','Thai','Sushi','Pan-Asian','South Asian']},
+  {label:'Middle Eastern & Africa',options:['African','Middle Eastern']},
+  {label:'UK & European',options:['British','Continental European','Italian','Greek']},
+  {label:'Lifestyle',options:['Breakfast','Cafe / Drinks','Desserts','Healthy / Bowls','Sandwiches']},
+];
+const jt2Dietary = ['Vegan Only','Vegetarian Only','100% Halal','100% Kosher'];
+const jt2Mission = ['Value','Premium','Healthy','Family Meal','Late Night','Lunch','Breakfast','Treat','Comfort Food','Group Order','Sharing'];
+const jt2State = {primary:[],specialty:[],dietary:[],mission:[]};
+const jt2Max = {primary:1,specialty:1,dietary:99,mission:99};
+let jt2OpenDD = null;
+
+function jt2AppendOpt(dd, opt, fk) {
+  const el = document.createElement('div');
+  el.className = 'jt-opt' + (jt2State[fk].includes(opt) ? ' jt-sel' : '');
+  el.innerHTML = '<span>' + opt + '</span>' + (jt2State[fk].includes(opt) ? '<span class="jt-opt-check">✓</span>' : '');
+  el.onclick = e => { e.stopPropagation(); jt2Toggle(fk, opt); };
+  dd.appendChild(el);
+}
+function jt2BuildGrouped(fk) {
+  const dd = document.getElementById('jt2-dd-' + fk); dd.innerHTML = '';
+  jt2PrimaryGroups.forEach(g => {
+    const gl = document.createElement('div'); gl.className = 'jt-opt-group-label'; gl.textContent = g.label; dd.appendChild(gl);
+    g.options.forEach(o => jt2AppendOpt(dd, o, fk));
+  });
+}
+function jt2BuildFlat(fk, opts) {
+  const dd = document.getElementById('jt2-dd-' + fk); dd.innerHTML = '';
+  opts.forEach(o => jt2AppendOpt(dd, o, fk));
+}
+function jt2Toggle(fk, val) {
+  const arr = jt2State[fk]; const max = jt2Max[fk]; const idx = arr.indexOf(val);
+  if (idx >= 0) arr.splice(idx, 1); else { if (arr.length >= max) arr.splice(0, 1); arr.push(val); }
+  if (fk === 'primary') { jt2State.specialty = []; jt2RenderTags('specialty'); jt2UpdateSpecialty(); }
+  jt2Rebuild(fk); jt2RenderTags(fk);
+}
+function jt2UpdateSpecialty() {
+  const box = document.getElementById('jt2-box-specialty');
+  const ph = document.getElementById('jt2-ph-specialty');
+  if (!jt2State.primary.length) {
+    box.style.opacity = '.5'; box.style.pointerEvents = 'none'; ph.textContent = 'Select primary cuisine first';
+  } else {
+    box.style.opacity = '1'; box.style.pointerEvents = 'auto'; ph.textContent = 'Select speciality cuisine';
+  }
+}
+function jt2Rebuild(fk) {
+  if (fk === 'primary') jt2BuildGrouped('primary');
+  else if (fk === 'specialty') jt2BuildFlat('specialty', jt2State.primary.length ? (jt2Map[jt2State.primary[0]] || []) : []);
+  else if (fk === 'dietary') jt2BuildFlat('dietary', jt2Dietary);
+  else if (fk === 'mission') jt2BuildFlat('mission', jt2Mission);
+}
+function jt2ToggleDD(fk) {
+  const dd = document.getElementById('jt2-dd-' + fk);
+  const box = document.getElementById('jt2-box-' + fk);
+  if (jt2OpenDD && jt2OpenDD !== fk) {
+    document.getElementById('jt2-dd-' + jt2OpenDD).classList.remove('visible');
+    document.getElementById('jt2-box-' + jt2OpenDD).classList.remove('open');
+  }
+  jt2Rebuild(fk);
+  const isOpen = dd.classList.toggle('visible'); box.classList.toggle('open', isOpen);
+  jt2OpenDD = isOpen ? fk : null;
+}
+function jt2RenderTags(fk) {
+  const box = document.getElementById('jt2-box-' + fk);
+  const ph = document.getElementById('jt2-ph-' + fk);
+  const ctr = document.getElementById('jt2-ctr-' + fk);
+  const chev = box.querySelector('.jt-chevron');
+  Array.from(box.querySelectorAll('.jt-tag')).forEach(t => t.remove());
+  const arr = jt2State[fk]; ph.style.display = arr.length ? 'none' : 'inline';
+  arr.forEach(v => {
+    const tag = document.createElement('span'); tag.className = 'jt-tag';
+    const rm = document.createElement('button'); rm.className = 'jt-tag-remove'; rm.innerHTML = '&#x2715;';
+    rm.onclick = e => { e.stopPropagation(); jt2Toggle(fk, v); };
+    tag.appendChild(document.createTextNode(v)); tag.appendChild(rm); box.insertBefore(tag, chev);
+  });
+  if (ctr) { ctr.textContent = arr.length + '/1 selected'; ctr.classList.toggle('warn', arr.length >= 1); }
+  if (fk === 'primary') jt2UpdateSpecialty();
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.jt-tag-box') && !e.target.closest('.jt-dropdown') && jt2OpenDD) {
+    document.getElementById('jt2-dd-' + jt2OpenDD).classList.remove('visible');
+    document.getElementById('jt2-box-' + jt2OpenDD).classList.remove('open');
+    jt2OpenDD = null;
+  }
+});
+</script>
+</body>
+</html>

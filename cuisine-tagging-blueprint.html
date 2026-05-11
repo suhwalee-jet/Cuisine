@@ -408,43 +408,6 @@
     margin-left: 2px;
   }
 
-  /* ── INTERFACE OVERLAY ── */
-  .iface-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 1000;
-    overflow-y: auto;
-  }
-  .iface-overlay.visible { display: block; }
-
-  /* ── BACK FAB ── */
-  .back-fab {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1100;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  }
-  .back-fab.visible { display: flex; }
-  .back-fab:hover {
-    background: var(--surface2);
-    transform: translateX(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  }
-  .back-fab svg { width: 20px; height: 20px; color: var(--text-primary); }
-
   /* ── FUTURE STATE SECTION ── */
   .future-section {
     margin-top: 40px;
@@ -743,10 +706,10 @@
         <div class="card-start-badge alt">Start point B</div>
         <div class="card-title">Restaurant self-registers</div>
         <div class="card-sub">Restaurant signs up independently via Partner Self-service (PSU)</div>
-        <div class="card-touchpoint interactive" onclick="openIface('psu')">
+        <a href="psu.html" class="card-touchpoint interactive" style="text-decoration:none;">
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="16" rx="4" fill="#2dd4a0"/><rect x="3" y="3" width="4" height="5" rx="1" fill="white" opacity="0.9"/><rect x="9" y="3" width="4" height="2.5" rx="1" fill="white" opacity="0.9"/><rect x="9" y="7" width="4" height="1.5" rx="0.5" fill="white" opacity="0.6"/><rect x="3" y="10" width="10" height="1.5" rx="0.5" fill="white" opacity="0.6"/><rect x="3" y="12.5" width="6" height="1.5" rx="0.5" fill="white" opacity="0.4"/></svg>
           PSU
-        </div>
+        </a>
       </div>
     </div>
     <div class="lane-cell">
@@ -775,20 +738,20 @@
         <div class="card-start-badge">Start point A</div>
         <div class="card-title">Sales creates lead</div>
         <div class="card-sub">Sales team adds new restaurant prospect in SalesForce</div>
-        <div class="card-touchpoint interactive" onclick="openIface('sf')">
+        <a href="sf.html" class="card-touchpoint interactive" style="text-decoration:none;">
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="16" rx="4" fill="#00A1E0"/><path d="M8 3.2c-.72 0-1.37.26-1.87.69a2.4 2.4 0 0 0-1.5-.52c-1.32 0-2.38 1.04-2.38 2.32 0 .42.11.81.31 1.15A2.1 2.1 0 0 0 2 8.1c0 1.16.96 2.1 2.14 2.1.24 0 .47-.04.68-.11C5.2 10.87 6 11.4 6.9 11.4c.47 0 .9-.14 1.26-.37.35.22.77.37 1.22.37.9 0 1.68-.52 2.05-1.27.22.07.45.11.69.11 1.18 0 2.14-.94 2.14-2.1 0-.55-.22-1.05-.57-1.43.08-.22.13-.46.13-.7 0-1.28-1.06-2.32-2.38-2.32-.5 0-.97.16-1.35.43A2.56 2.56 0 0 0 8 3.2z" fill="white"/></svg>
           SalesForce
-        </div>
+        </a>
       </div>
     </div>
     <div class="lane-cell">
       <div class="card backstage" id="card-sales-registers">
         <div class="card-title">Sales registers restaurant</div>
         <div class="card-sub">Sales team registers restaurant and assigns initial tags in SalesForce, triggering JETMS flow</div>
-        <div class="card-touchpoint interactive" onclick="openIface('sf')">
+        <a href="sf.html" class="card-touchpoint interactive" style="text-decoration:none;">
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="16" rx="4" fill="#00A1E0"/><path d="M8 3.2c-.72 0-1.37.26-1.87.69a2.4 2.4 0 0 0-1.5-.52c-1.32 0-2.38 1.04-2.38 2.32 0 .42.11.81.31 1.15A2.1 2.1 0 0 0 2 8.1c0 1.16.96 2.1 2.14 2.1.24 0 .47-.04.68-.11C5.2 10.87 6 11.4 6.9 11.4c.47 0 .9-.14 1.26-.37.35.22.77.37 1.22.37.9 0 1.68-.52 2.05-1.27.22.07.45.11.69.11 1.18 0 2.14-.94 2.14-2.1 0-.55-.22-1.05-.57-1.43.08-.22.13-.46.13-.7 0-1.28-1.06-2.32-2.38-2.32-.5 0-.97.16-1.35.43A2.56 2.56 0 0 0 8 3.2z" fill="white"/></svg>
           SalesForce
-        </div>
+        </a>
       </div>
     </div>
     <div class="lane-cell">
@@ -809,10 +772,10 @@
     <div class="lane-cell">
       <div class="card backstage" id="card-cs-updates">
         <div class="card-sub">Customer Success agent manually edits tag values in JETMS; changes propagate immediately</div>
-        <div class="card-touchpoint interactive" onclick="openIface('jetms')">
+        <a href="jetms.html" class="card-touchpoint interactive" style="text-decoration:none;">
           <img src="data:image/png;base64,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" alt="JETMS" style="width:16px;height:16px;border-radius:3px;flex-shrink:0;">
           JETMS
-        </div>
+        </a>
       </div>
     </div>
 
@@ -1116,12 +1079,6 @@ window.addEventListener('resize', drawArrows);
   </div>
 </div>
 
-<!-- ── BACK FAB ── -->
-<button class="back-fab" id="back-fab" onclick="closeIface()" aria-label="Back to service blueprint">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M19 12H5M5 12l7 7M5 12l7-7"/>
-  </svg>
-</button>
 
 <!-- ── SALESFORCE OVERLAY ── -->
 <div class="iface-overlay" id="iface-sf">

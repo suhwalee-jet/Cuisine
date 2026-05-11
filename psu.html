@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PSU — Partner Self-Service Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --surface: #17171a;
+  --border-strong: rgba(255,255,255,0.14);
+  --text-secondary: #9190a0;
+  --text-muted: #5a5970;
+  --mono: 'DM Mono', monospace;
+}
+body { margin: 0; }
+
+/* ── back nav ── */
+.back-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-strong);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  transition: color 0.15s, border-color 0.15s;
+}
+.back-link:hover { color: #f0eff5; border-color: rgba(255,255,255,0.3); }
+.back-link svg { width: 13px; height: 13px; flex-shrink: 0; }
+.back-nav-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── PSU UI ── */
+.je-page{font-family:'Helvetica Neue',Helvetica,sans-serif;background:#fff;min-height:calc(100vh - 45px);display:flex;flex-direction:column}
+.je-nav{border-bottom:1px solid #e8e8e8;padding:16px 32px;display:flex;align-items:center;justify-content:center;background:#fff}
+.je-logo{display:flex;align-items:center;gap:8px}
+.je-logo-text{font-size:22px;font-weight:800;color:#f26522;letter-spacing:.02em;text-transform:uppercase}
+.je-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 24px 64px}
+.je-form-wrap{width:100%;max-width:540px}
+.je-heading{font-size:26px;font-weight:800;color:#1a1a1a;text-align:center;line-height:1.2;margin-bottom:10px}
+.je-subheading{font-size:15px;color:#666;text-align:center;margin-bottom:40px}
+.je-field{margin-bottom:24px}
+.je-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.je-label{font-size:14px;font-weight:700;color:#1a1a1a}
+.je-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.je-badge.single{background:#fff3e8;color:#c45000;border:1px solid #f9c49a}
+.je-badge.multi{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.je-hint{font-size:12px;color:#888;margin-bottom:7px;line-height:1.4}
+.je-select-wrap{position:relative}
+.je-select{width:100%;appearance:none;-webkit-appearance:none;background:#fff;border:1.5px solid #d0d0d0;border-radius:12px;padding:14px 44px 14px 16px;font-size:15px;color:#1a1a1a;cursor:pointer;font-family:inherit;outline:none}
+.je-select:focus{border-color:#f26522;box-shadow:0 0 0 3px rgba(242,101,34,.12)}
+.je-select:disabled{background:#f7f7f7;color:#aaa;cursor:not-allowed}
+.je-select-chevron{position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none;color:#555;font-size:18px}
+.je-multiselect-tags{border:1.5px solid #d0d0d0;border-radius:12px;padding:10px 12px;min-height:52px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;cursor:pointer;transition:border-color .15s;background:#fff}
+.je-multiselect-tags:focus-within{border-color:#f26522;box-shadow:0 0 0 3px rgba(242,101,34,.12)}
+.je-tag-pill{display:flex;align-items:center;gap:5px;background:#fff3e8;border:1px solid #f9c49a;border-radius:20px;padding:3px 10px;font-size:13px;font-weight:600;color:#c45000;white-space:nowrap}
+.je-tag-pill.green{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
+.je-tag-remove{background:none;border:none;cursor:pointer;color:inherit;padding:0;font-size:14px;line-height:1;opacity:.6}
+.je-tag-remove:hover{opacity:1}
+.je-multiselect-placeholder{font-size:15px;color:#aaa;padding:4px 4px}
+.je-multiselect-chevron{margin-left:auto;color:#555;font-size:18px;padding:4px;flex-shrink:0}
+.je-dropdown-menu{border:1.5px solid #d0d0d0;border-radius:12px;background:#fff;margin-top:4px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.10)}
+.je-dropdown-item{padding:12px 16px;font-size:14px;color:#1a1a1a;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid #f0f0f0}
+.je-dropdown-item:last-child{border-bottom:none}
+.je-dropdown-item:hover{background:#fff8f4}
+.je-dropdown-item.je-sel{background:#fff3e8;font-weight:600;color:#c45000}
+.je-dropdown-item.je-sel-g{background:#e8f5e9;font-weight:600;color:#2e7d32}
+.je-check-o{color:#f26522;font-size:15px;font-weight:700}
+.je-check-g{color:#4caf50;font-size:15px;font-weight:700}
+.je-section-divider{border:none;border-top:1px solid #f0f0f0;margin:8px 0 32px}
+.je-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbb;margin-bottom:16px}
+.je-btn-row{display:flex;align-items:center;justify-content:space-between;margin-top:40px}
+.je-btn-back2{background:none;border:1.5px solid #d0d0d0;border-radius:24px;padding:13px 28px;font-size:15px;font-weight:600;color:#444;cursor:pointer;font-family:inherit}
+.je-btn-next{background:#f26522;border:none;border-radius:24px;padding:13px 40px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit}
+.je-btn-next:hover{background:#d95818}
+.je-progress-wrap{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 32px 0}
+.je-step{display:flex;align-items:center;gap:6px;font-size:12px;color:#aaa;font-weight:500;font-family:'Helvetica Neue',sans-serif}
+.je-step.active{color:#f26522}
+.je-step.done{color:#4caf50}
+.je-step-dot{width:8px;height:8px;border-radius:50%;background:#ddd;flex-shrink:0}
+.je-step.active .je-step-dot{background:#f26522}
+.je-step.done .je-step-dot{background:#4caf50}
+.je-step-line{width:32px;height:1px;background:#ddd;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="cuisine-tagging-blueprint.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+    Service Blueprint
+  </a>
+  <span class="back-nav-label">PSU · Partner Self-Service Portal</span>
+</nav>
+
+<div class="je-page">
+  <nav class="je-nav">
+    <div class="je-logo">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#f26522"/><path d="M18 6C13.6 6 10 9.6 10 14c0 5.5 8 16 8 16s8-10.5 8-16c0-4.4-3.6-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#fff"/></svg>
+      <span class="je-logo-text">Just Eat</span>
+    </div>
+  </nav>
+  <div class="je-progress-wrap">
+    <div class="je-step done"><div class="je-step-dot"></div> Basic info</div>
+    <div class="je-step-line"></div>
+    <div class="je-step done"><div class="je-step-dot"></div> Location</div>
+    <div class="je-step-line"></div>
+    <div class="je-step active"><div class="je-step-dot"></div> Cuisine &amp; tags</div>
+    <div class="je-step-line"></div>
+    <div class="je-step"><div class="je-step-dot"></div> Menu</div>
+    <div class="je-step-line"></div>
+    <div class="je-step"><div class="je-step-dot"></div> Review</div>
+  </div>
+  <div class="je-body">
+    <div class="je-form-wrap">
+      <h1 class="je-heading">What cuisines does your restaurant serve?</h1>
+      <p class="je-subheading">This will help customers find your restaurant</p>
+      <div class="je-section-label">Cuisine</div>
+      <div class="je-field">
+        <div class="je-label-row"><label class="je-label">Primary cuisine</label><span class="je-badge single">Select 1</span></div>
+        <p class="je-hint">The main cuisine type that best describes your restaurant.</p>
+        <div class="je-select-wrap">
+          <select class="je-select" id="psu-primary" onchange="psuHandlePrimary(this)">
+            <option value="" disabled selected>Select an option</option>
+            <optgroup label="Takeaway favourites"><option>Burger</option><option>Pizza</option><option>Chicken</option><option>Kebab</option><option>Mixed takeaway</option></optgroup>
+            <optgroup label="Americas"><option>Grillhouse / BBQ</option><option>Caribbean</option><option>Mexican</option></optgroup>
+            <optgroup label="Asian"><option>Chinese</option><option>Indian</option><option>Japanese</option><option>Korean</option><option>Thai</option><option>Sushi</option><option>Pan-Asian</option><option>South Asian</option></optgroup>
+            <optgroup label="Middle Eastern &amp; Africa"><option>African</option><option>Middle Eastern</option></optgroup>
+            <optgroup label="UK &amp; European"><option>British</option><option>Continental European</option><option>Italian</option><option>Greek</option></optgroup>
+            <optgroup label="Lifestyle"><option>Breakfast</option><option>Cafe / Drinks</option><option>Desserts</option><option>Healthy / Bowls</option><option>Sandwiches</option></optgroup>
+          </select>
+          <span class="je-select-chevron">&#8964;</span>
+        </div>
+      </div>
+      <div class="je-field" id="psu-specialty-field" style="opacity:.4;pointer-events:none">
+        <div class="je-label-row"><label class="je-label">Dynamic speciality cuisine</label><span class="je-badge single">Select 1 · optional</span></div>
+        <p class="je-hint">A more specific style within your primary cuisine.</p>
+        <div class="je-select-wrap"><select class="je-select" id="psu-specialty"><option value="">None</option></select><span class="je-select-chevron">&#8964;</span></div>
+      </div>
+      <hr class="je-section-divider"/>
+      <div class="je-section-label">Dietary &amp; mission</div>
+      <div class="je-field">
+        <div class="je-label-row"><label class="je-label">Dietary</label><span class="je-badge multi">Select all that apply</span></div>
+        <p class="je-hint">Only select if your <strong>entire</strong> menu meets the requirement.</p>
+        <div class="je-multiselect-tags" id="psu-dietary-tags" onclick="psuToggleDD('psu-dietary-dd')">
+          <span class="je-multiselect-placeholder" id="psu-dietary-ph">Select options</span>
+          <span class="je-multiselect-chevron">&#8964;</span>
+        </div>
+        <div class="je-dropdown-menu" id="psu-dietary-dd" style="display:none">
+          <div class="je-dropdown-item" onclick="psuToggleTag('dietary','Vegan Only')">Vegan Only <span id="psu-chk-dietary-Vegan Only" class="je-check-o"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('dietary','Vegetarian Only')">Vegetarian Only <span id="psu-chk-dietary-Vegetarian Only" class="je-check-o"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('dietary','100% Halal')">100% Halal <span id="psu-chk-dietary-100% Halal" class="je-check-o"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('dietary','100% Kosher')">100% Kosher <span id="psu-chk-dietary-100% Kosher" class="je-check-o"></span></div>
+        </div>
+      </div>
+      <div class="je-field">
+        <div class="je-label-row"><label class="je-label">Mission</label><span class="je-badge multi">Select all that apply</span></div>
+        <p class="je-hint">What occasions or needs does your restaurant serve best?</p>
+        <div class="je-multiselect-tags" id="psu-mission-tags" onclick="psuToggleDD('psu-mission-dd')">
+          <span class="je-multiselect-placeholder" id="psu-mission-ph">Select options</span>
+          <span class="je-multiselect-chevron">&#8964;</span>
+        </div>
+        <div class="je-dropdown-menu" id="psu-mission-dd" style="display:none">
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Value')">Value <span id="psu-chk-mission-Value" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Premium')">Premium <span id="psu-chk-mission-Premium" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Healthy')">Healthy <span id="psu-chk-mission-Healthy" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Family Meal')">Family Meal <span id="psu-chk-mission-Family Meal" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Late Night')">Late Night <span id="psu-chk-mission-Late Night" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Lunch')">Lunch <span id="psu-chk-mission-Lunch" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Breakfast')">Breakfast <span id="psu-chk-mission-Breakfast" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Treat')">Treat <span id="psu-chk-mission-Treat" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Comfort Food')">Comfort Food <span id="psu-chk-mission-Comfort Food" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Group Order')">Group Order <span id="psu-chk-mission-Group Order" class="je-check-g"></span></div>
+          <div class="je-dropdown-item" onclick="psuToggleTag('mission','Sharing')">Sharing <span id="psu-chk-mission-Sharing" class="je-check-g"></span></div>
+        </div>
+      </div>
+      <div class="je-btn-row">
+        <button class="je-btn-back2">&#8592; Back</button>
+        <button class="je-btn-next">Continue &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const psuMap = {
+  'Burger':['Fast Food','Gourmet','Smash','Vegan'],'Pizza':['American','Italian'],'Chicken':['Chicken Wings','Fried Chicken','Peri Peri','Grilled Chicken'],'Kebab':['Doner','Gyros','Shish','Mixed Grill','Wraps / Shawarma'],'Mixed Takeaway':['Pizza & Kebab','Burger & Chicken','Chicken and Kebab','Mixed Fast Food'],'Grillhouse / BBQ':['BBQ','Steak','Ribs'],'Mexican':['Tacos','Burritos','Tex-Mex'],'Chinese':['Classic Takeaway','Dim Sum','Cantonese','Szechuan'],'Indian':['Curry House','North Indian','Punjabi','South Indian'],'Japanese':['Noodles','Ramen'],'Korean':['Korean Fried Chicken','Korean BBQ'],'Thai':['Thai Street Food','Thai Curry'],'Pan-Asian':['Indonesian','Indo-Chinese','Malaysian','Filipino','Vietnamese'],'South Asian':['Bangladeshi','Pakistani','Nepalese','Sri Lankan'],'African':['African Grill','Ethiopian','Ghanaian','Nigerian','South African'],'Middle Eastern':['Iranian','Persian','Lebanese','Egyptian','Moroccan','Turkish'],'British':['Fish and Chips','Pub Food','Carvery / Roast Dinner'],'Continental European':['Balkan','French','German','Portuguese','Polish','Spanish'],'Italian':['Pasta','Pizza and Pasta','Italian Dining'],'Greek':['Greek Grill','Meze'],'Cafe / Drinks':['Bakery','Bubble Tea','Cafe','Coffee','Smoothies'],'Desserts':['Ice Cream','Pancakes / Waffles'],'Healthy / Bowls':['Poke','Protein Bowls','Rice Bowls','Salads'],'Sandwiches':['Bagels','Deli','Wraps']
+};
+const psuState = { dietary: [], mission: [] };
+let psuOpenDD = null;
+function psuHandlePrimary(sel) {
+  const sf = document.getElementById('psu-specialty-field');
+  const sc = document.getElementById('psu-specialty');
+  const opts = psuMap[sel.value] || [];
+  sc.innerHTML = '<option value="">None</option>';
+  if (opts.length) { opts.forEach(o => { const op = document.createElement('option'); op.value = op.textContent = o; sc.appendChild(op); }); sf.style.opacity='1'; sf.style.pointerEvents='auto'; }
+  else { sf.style.opacity='0.4'; sf.style.pointerEvents='none'; }
+}
+function psuToggleDD(id) {
+  const dd = document.getElementById(id);
+  if (psuOpenDD && psuOpenDD !== id) document.getElementById(psuOpenDD).style.display = 'none';
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  psuOpenDD = dd.style.display === 'block' ? id : null;
+}
+function psuToggleTag(grp, val) {
+  const arr = psuState[grp]; const idx = arr.indexOf(val);
+  if (idx >= 0) arr.splice(idx,1); else arr.push(val);
+  psuRenderTags(grp);
+}
+function psuRenderTags(grp) {
+  const box = document.getElementById('psu-' + grp + '-tags');
+  const ph = document.getElementById('psu-' + grp + '-ph');
+  const chev = box.querySelector('.je-multiselect-chevron');
+  const isGreen = grp === 'mission';
+  Array.from(box.querySelectorAll('.je-tag-pill')).forEach(p => p.remove());
+  ph.style.display = psuState[grp].length ? 'none' : 'inline';
+  psuState[grp].forEach(v => {
+    const pill = document.createElement('span'); pill.className = 'je-tag-pill' + (isGreen ? ' green' : '');
+    const rm = document.createElement('button'); rm.className = 'je-tag-remove'; rm.innerHTML = '&#x2715;'; rm.onclick = e => { e.stopPropagation(); psuToggleTag(grp, v); };
+    pill.appendChild(document.createTextNode(v)); pill.appendChild(rm); box.insertBefore(pill, chev);
+  });
+  const ddItems = document.querySelectorAll('#psu-' + grp + '-dd .je-dropdown-item');
+  ddItems.forEach(item => {
+    const txt = item.textContent.replace('✓','').trim();
+    const chk = document.getElementById('psu-chk-' + grp + '-' + txt);
+    if (chk) chk.textContent = psuState[grp].includes(txt) ? '✓' : '';
+    item.classList.toggle(isGreen ? 'je-sel-g' : 'je-sel', psuState[grp].includes(txt));
+  });
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.je-multiselect-tags') && !e.target.closest('.je-dropdown-menu')) {
+    ['psu-dietary-dd','psu-mission-dd'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    psuOpenDD = null;
+  }
+});
+</script>
+</body>
+</html>
