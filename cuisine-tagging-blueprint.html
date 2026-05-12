@@ -179,9 +179,9 @@
   }
 
   .blueprint {
-    min-width: 1000px;
+    min-width: 1200px;
     display: grid;
-    grid-template-columns: var(--lane-label-w) repeat(4, var(--stage-w));
+    grid-template-columns: var(--lane-label-w) repeat(5, var(--stage-w));
     gap: 0;
   }
 
@@ -407,6 +407,24 @@
     opacity: 0.5;
     margin-left: 2px;
   }
+  /* dimmed TBD pill */
+  .card-touchpoint.tbd {
+    opacity: 0.38;
+    cursor: default;
+    pointer-events: none;
+  }
+  .card-touchpoint.tbd::after { content: ''; }
+  /* wrapper for multiple pills */
+  .card-touchpoints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .card-touchpoints .card-touchpoint { margin-top: 0; }
+
+  /* hide legacy overlay divs — content moved to separate pages */
+  .iface-overlay { display: none !important; }
 
   /* ── FUTURE STATE SECTION ── */
   .future-section {
@@ -559,6 +577,113 @@
   .tag-pill.dietary   { background: rgba(249,112,82,0.1); color: var(--backstage); border: 1px solid var(--backstage-border); }
   .tag-pill.mission   { background: rgba(244,188,69,0.1); color: var(--future); border: 1px solid var(--future-border); }
 
+  /* ── FUTURE PHASE LAYOUT ── */
+  .future-phases {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .future-phase {
+    border: 1px dashed var(--future-border);
+    border-radius: 12px;
+    padding: 20px 24px 24px;
+    background: var(--future-bg);
+  }
+
+  .future-phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .future-phase-pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--future);
+    background: rgba(244,188,69,0.18);
+    border: 1px solid var(--future-border);
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .future-phase-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .future-phase-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  /* ── PRODUCT CATALOGUE CALLOUT ── */
+  .catalogue-callout {
+    margin: 0 48px 32px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid rgba(148,163,184,0.25);
+    border-left: 3px solid var(--support);
+    border-radius: 10px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .catalogue-callout-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(148,163,184,0.12);
+    border: 1px solid rgba(148,163,184,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .catalogue-callout-body {}
+
+  .catalogue-callout-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .catalogue-callout-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .catalogue-callout-sub strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .tbd-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--future);
+    background: var(--future-bg);
+    border: 1px dashed var(--future-border);
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
@@ -614,6 +739,10 @@
     <!-- Stage headers -->
     <div class="stage-header-spacer"></div>
     <div class="stage-header">
+      <div class="stage-number">00</div>
+      <div class="stage-title">Data Capture</div>
+    </div>
+    <div class="stage-header">
       <div class="stage-number">01</div>
       <div class="stage-title">Lead Generation</div>
     </div>
@@ -637,6 +766,12 @@
     </div>
 
     <div class="lane-label-cell"></div>
+    <div class="lane-cell">
+      <div class="card support">
+        <div class="card-title">Scraped data record</div>
+        <div class="card-sub">Restaurant profile enriched from public web sources before outreach</div>
+      </div>
+    </div>
     <div class="lane-cell">
       <div class="card support">
         <div class="card-title">SalesForce lead</div>
@@ -677,12 +812,21 @@
       <div class="card-empty">—</div>
     </div>
     <div class="lane-cell">
+      <div class="card-empty">—</div>
+    </div>
+    <div class="lane-cell">
       <div class="card customer" id="card-customer-finds">
         <div class="card-title">Customer finds restaurant</div>
         <div class="card-sub">Discovers via category browsing, cuisine filters, or search — all powered by tags</div>
-        <div class="card-touchpoint">
-          <img src="data:image/png;base64,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" alt="Just Eat" style="width:16px;height:16px;border-radius:3px;flex-shrink:0;">
-          Just Eat app / web
+        <div class="card-touchpoints">
+          <a href="je-app.html" class="card-touchpoint interactive" style="text-decoration:none;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><rect width="16" height="16" rx="3" fill="#FF6600"/><rect x="3" y="2.5" width="10" height="11" rx="1.5" stroke="white" stroke-width="1.2" fill="none"/><line x1="5.5" y1="6" x2="10.5" y2="6" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="5.5" y1="8.5" x2="10.5" y2="8.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="5.5" y1="11" x2="8.5" y2="11" stroke="white" stroke-width="1.1" stroke-linecap="round"/></svg>
+            App
+          </a>
+          <span class="card-touchpoint tbd">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><rect width="16" height="16" rx="3" fill="#FF6600"/><circle cx="8" cy="8" r="4.5" stroke="white" stroke-width="1.2" fill="none"/><line x1="8" y1="3.5" x2="8" y2="5.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="10.5" x2="8" y2="12.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="3.5" y1="8" x2="5.5" y2="8" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="10.5" y1="8" x2="12.5" y2="8" stroke="white" stroke-width="1.1" stroke-linecap="round"/></svg>
+            Web
+          </span>
         </div>
       </div>
     </div>
@@ -698,6 +842,9 @@
 
     <!-- ── FRONTSTAGE LANE ── -->
     <div class="lane-label-cell"><span class="lane-label">Frontstage</span></div>
+    <div class="lane-cell">
+      <div class="card-empty">—</div>
+    </div>
     <div class="lane-cell">
       <div class="card-empty">—</div>
     </div>
@@ -718,9 +865,15 @@
     <div class="lane-cell">
       <div class="card frontstage" id="card-tag-change-request">
         <div class="card-sub">Restaurant contacts CS to update one or more tags</div>
-        <div class="card-touchpoint">
-          <img src="data:image/png;base64,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" alt="Just Eat" style="width:16px;height:16px;border-radius:3px;flex-shrink:0;">
-          Just Eat app / web
+        <div class="card-touchpoints">
+          <a href="je-app.html" class="card-touchpoint interactive" style="text-decoration:none;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><rect width="16" height="16" rx="3" fill="#FF6600"/><rect x="3" y="2.5" width="10" height="11" rx="1.5" stroke="white" stroke-width="1.2" fill="none"/><line x1="5.5" y1="6" x2="10.5" y2="6" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="5.5" y1="8.5" x2="10.5" y2="8.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="5.5" y1="11" x2="8.5" y2="11" stroke="white" stroke-width="1.1" stroke-linecap="round"/></svg>
+            App
+          </a>
+          <span class="card-touchpoint tbd">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><rect width="16" height="16" rx="3" fill="#FF6600"/><circle cx="8" cy="8" r="4.5" stroke="white" stroke-width="1.2" fill="none"/><line x1="8" y1="3.5" x2="8" y2="5.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="10.5" x2="8" y2="12.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="3.5" y1="8" x2="5.5" y2="8" stroke="white" stroke-width="1.1" stroke-linecap="round"/><line x1="10.5" y1="8" x2="12.5" y2="8" stroke="white" stroke-width="1.1" stroke-linecap="round"/></svg>
+            Web
+          </span>
         </div>
       </div>
     </div>
@@ -733,6 +886,16 @@
 
     <!-- ── BACKSTAGE LANE ── -->
     <div class="lane-label-cell"><span class="lane-label">Backstage</span></div>
+    <div class="lane-cell">
+      <div class="card backstage" id="card-scraping">
+        <div class="card-title">Automated data scraping</div>
+        <div class="card-sub">Scraper collects restaurant name, website, menu, social profiles and infers cuisine signals from public data</div>
+        <div class="card-touchpoint">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="flex-shrink:0;"><rect width="16" height="16" rx="4" fill="#f97052"/><circle cx="7" cy="7" r="3.5" stroke="white" stroke-width="1.2" fill="none" opacity="0.9"/><path d="M9.5 9.5L13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/></svg>
+          Data pipeline
+        </div>
+      </div>
+    </div>
     <div class="lane-cell">
       <div class="card backstage" id="card-sales-lead">
         <div class="card-start-badge">Start point A</div>
@@ -786,6 +949,12 @@
     </div>
 
     <div class="lane-label-cell"><span class="lane-label">Support</span></div>
+    <div class="lane-cell">
+      <div class="card support">
+        <div class="card-title">Scraping service</div>
+        <div class="card-sub">Automated tool (e.g. web crawler / third-party enrichment API) that surfaces restaurant data pre-outreach</div>
+      </div>
+    </div>
     <div class="lane-cell">
       <div class="card support">
         <div class="card-title">SalesForce CRM</div>
@@ -970,48 +1139,124 @@ window.addEventListener('resize', drawArrows);
 <div class="future-section">
   <div class="future-header">
     <span class="future-badge">Future state</span>
-    <span class="future-title">Automated tag suggestion via Partner Hub</span>
+    <span class="future-title">Two-phase roadmap to smarter cuisine tagging</span>
   </div>
 
-  <div class="future-flow">
-    <div class="future-step">
-      <div class="future-card">
-        <span class="future-card-actor customer">Restaurant</span>
-        <div class="future-card-title">Uploads new menu</div>
-        <div class="future-card-sub">Restaurant submits updated menu file via Partner Hub</div>
+  <div class="future-phases">
+
+    <!-- Phase 1 -->
+    <div class="future-phase">
+      <div class="future-phase-header">
+        <span class="future-phase-pill">Phase 1</span>
+        <span class="future-phase-title">New taxonomy rollout — existing processes retained</span>
+      </div>
+      <div class="future-phase-desc">Migrate all touchpoints to the updated cuisine taxonomy (v1.3) while keeping SalesForce, PSU and JETMS as the tagging surfaces. No new automation — focus is accuracy and consistency before introducing AI.</div>
+      <div class="future-flow">
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">SalesForce</span>
+            <div class="future-card-title">Updated picklists</div>
+            <div class="future-card-sub">SF cuisine fields updated to v1.3 taxonomy; Sales team retrained on new categories</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor frontstage">PSU</span>
+            <div class="future-card-title">New taxonomy in dropdowns</div>
+            <div class="future-card-sub">Partner portal reflects updated Primary + Speciality options from v1.3 structure</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">JETMS</span>
+            <div class="future-card-title">Tag editor updated</div>
+            <div class="future-card-sub">CS agents work from same v1.3 taxonomy; existing manual review flow unchanged</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">Backend</span>
+            <div class="future-card-title">Taxonomy v1.3 as source of truth</div>
+            <div class="future-card-sub">Product catalogue dish taxonomy validated against stored tag values; data quality baseline established</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="future-arrow">→</div>
-    <div class="future-step">
-      <div class="future-card">
-        <span class="future-card-actor frontstage">Partner Hub</span>
-        <div class="future-card-title">Analyses menu</div>
-        <div class="future-card-sub">System parses menu items and maps them to taxonomy</div>
+
+    <!-- Phase 2 -->
+    <div class="future-phase">
+      <div class="future-phase-header">
+        <span class="future-phase-pill">Phase 2</span>
+        <span class="future-phase-title">AI-powered cuisine recommendation from partner menu</span>
+      </div>
+      <div class="future-phase-desc">AI model analyses a partner's product catalogue (menu items mapped to dish taxonomy) to infer and recommend cuisine tags. Reduces manual effort for Sales and CS; surfaces suggestions at onboarding and on menu change events.</div>
+      <div class="future-flow">
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">Product catalogue</span>
+            <div class="future-card-title">Menu items ingested</div>
+            <div class="future-card-sub">Partner's dish-level data (food items, categories) read from the product catalogue pipeline</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">AI model</span>
+            <div class="future-card-title">Cuisine inferred</div>
+            <div class="future-card-sub">Model maps menu items against dish taxonomy to score and recommend Primary, Speciality, Dietary and Mission tags</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor frontstage">PSU / JETMS</span>
+            <div class="future-card-title">Suggestions surfaced</div>
+            <div class="future-card-sub">Recommended tags pre-populated at onboarding (PSU) or flagged for CS review (JETMS) on menu change</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor customer">Partner</span>
+            <div class="future-card-title">Confirms or amends</div>
+            <div class="future-card-sub">Partner accepts suggestions or selects alternatives — zero-touch path for high-confidence matches</div>
+          </div>
+        </div>
+        <div class="future-arrow">→</div>
+        <div class="future-step">
+          <div class="future-card">
+            <span class="future-card-actor backstage">JETMS / SF</span>
+            <div class="future-card-title">Auto-written</div>
+            <div class="future-card-sub">Tags committed to JETMS without CS involvement on confirmed recommendations</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="future-arrow">→</div>
-    <div class="future-step">
-      <div class="future-card">
-        <span class="future-card-actor frontstage">Partner Hub</span>
-        <div class="future-card-title">Suggests tags</div>
-        <div class="future-card-sub">Proposes Primary, Speciality, Dietary and Mission tags for review</div>
-      </div>
-    </div>
-    <div class="future-arrow">→</div>
-    <div class="future-step">
-      <div class="future-card">
-        <span class="future-card-actor customer">Restaurant</span>
-        <div class="future-card-title">Confirms or amends</div>
-        <div class="future-card-sub">Restaurant accepts suggestions or selects alternatives from taxonomy</div>
-      </div>
-    </div>
-    <div class="future-arrow">→</div>
-    <div class="future-step">
-      <div class="future-card">
-        <span class="future-card-actor backstage">JETMS / SalesForce</span>
-        <div class="future-card-title">Auto-updated</div>
-        <div class="future-card-sub">Tags written to JETMS without CS involvement — zero-touch update</div>
-      </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PRODUCT CATALOGUE CALLOUT
+══════════════════════════════════ -->
+<div class="catalogue-callout">
+  <div class="catalogue-callout-icon">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="16" height="16" rx="4" fill="rgba(148,163,184,0.2)"/>
+      <rect x="3" y="3" width="4" height="4" rx="1" fill="#94a3b8" opacity="0.9"/>
+      <rect x="9" y="3" width="4" height="4" rx="1" fill="#94a3b8" opacity="0.6"/>
+      <rect x="3" y="9" width="4" height="4" rx="1" fill="#94a3b8" opacity="0.6"/>
+      <rect x="9" y="9" width="4" height="4" rx="1" fill="#94a3b8" opacity="0.3"/>
+    </svg>
+  </div>
+  <div class="catalogue-callout-body">
+    <div class="catalogue-callout-title">Product catalogue &amp; dish taxonomy — relevance to cuisine tagging</div>
+    <div class="catalogue-callout-sub">
+      The <strong>product catalogue dish taxonomy (v1.3)</strong> introduces a hierarchical structure for food items (Root → L1 category → L2 leaf, e.g. Food → Appetizers &amp; Sides → French Fries) that is directly relevant to how restaurant cuisines are classified. In Phase 2, menu items from the product catalogue will be the primary signal for AI-driven cuisine tag recommendations — the richer and more accurate the dish taxonomy, the better the cuisine inference.<br><br>
+      The dish taxonomy also covers <strong>restaurant-level cuisine classification</strong> as a parallel use case. <strong>How this data will be consumed by web and app surfaces is currently undefined</strong> <span class="tbd-badge">TBD</span> — follow-up conversations are needed between Product, Engineering and the Catalogue team to align on data contracts, API shape, and how taxonomy nodes map to displayed cuisine labels in search and browse.
     </div>
   </div>
 </div>
