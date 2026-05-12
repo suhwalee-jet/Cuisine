@@ -21,7 +21,7 @@
     --je-black: #1a1a1a;
   }
 
-  body { background: var(--bg); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: auto; }
 
   /* ── Back nav ── */
   .back-nav {
@@ -44,9 +44,9 @@
 
   /* ── Phones layout ── */
   .page-wrap {
-    display: flex; justify-content: center; align-items: flex-start;
-    gap: 48px; padding: 48px 48px 80px;
-    overflow-x: auto; min-height: calc(100vh - 45px);
+    display: flex; justify-content: flex-start; align-items: flex-start;
+    gap: 48px; padding: 48px 280px 80px 270px;
+    min-height: calc(100vh - 45px);
   }
   .phone-col {
     display: flex; flex-direction: column; align-items: center;
@@ -351,7 +351,13 @@
   .ann-title {
     font-size: 11px; font-weight: 600; color: #f0f0f2;
     margin-bottom: 4px; font-family: 'DM Sans', sans-serif; line-height: 1.3;
+    cursor: pointer; pointer-events: auto;
+    text-decoration: underline; text-decoration-color: transparent;
+    transition: text-decoration-color .15s;
   }
+  .ann-title:hover { text-decoration-color: rgba(240,240,242,0.5); }
+  .ann-title-icon { display: inline; vertical-align: middle; margin-left: 4px; opacity: 0.45; transition: opacity .15s; }
+  .ann-title:hover .ann-title-icon { opacity: 0.85; }
   .ann-desc {
     font-size: 10px; color: #8a8a94; line-height: 1.55;
     font-family: 'DM Sans', sans-serif;
@@ -368,23 +374,13 @@
   .ann-legend-dot.orange { background: #FF6600; }
   .ann-legend-dot.teal   { background: #0d9488; }
 
-  /* Snap buttons — collapsed state */
-  .ann-snap-btn {
-    position: absolute;
-    display: none;
-    align-items: center; gap: 4px;
-    padding: 5px 10px 5px 7px;
-    border-radius: 12px; border: none;
-    font-size: 10px; font-weight: 600; letter-spacing: .01em;
-    cursor: pointer; white-space: nowrap;
-    font-family: 'DM Sans', sans-serif;
-    z-index: 53; pointer-events: auto;
-    transition: opacity .15s; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  /* Dot — collapsed state (just outside phone bezel, clickable) */
+  .ann-dot.is-collapsed {
+    cursor: pointer;
+    width: 12px; height: 12px;
+    pointer-events: auto;
   }
-  .ann-snap-btn:hover { opacity: .85; }
-  .ann-snap-btn.orange { background: rgba(255,102,0,0.95); color: #fff; }
-  .ann-snap-btn.teal   { background: rgba(13,148,136,0.95); color: #fff; }
-  .snap-arrow { flex-shrink: 0; transition: transform .15s; }
+  .ann-dot.is-collapsed:hover { opacity: .7; }
 
 </style>
 </head>
@@ -541,42 +537,30 @@
     <div class="ann-group" id="ann-search">
       <div class="ann-dot orange" style="top:105px;left:100px;"></div>
       <div class="ann-line orange" style="top:105px;left:-26px;width:121px;"></div>
-      <div class="ann-pill orange" style="top:76px;left:-220px;">
-        <div class="ann-title">Search</div>
+      <div class="ann-pill orange" style="top:76px;left:-238px;">
+        <div class="ann-title">Search<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
         <div class="ann-desc">Cuisine tag names and dish names from the Product Catalogue are both indexed — searching "noodles" surfaces relevant restaurants even without an exact cuisine tag match. <span style="color:#0d9488;font-weight:600;">+ Dish taxonomy</span></div>
       </div>
-      <button class="ann-snap-btn orange" style="display:none;top:44px;left:10px;">
-        <svg class="snap-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 8.5V1.5M2 4.5l3-3 3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Search
-      </button>
     </div>
 
     <!-- Find your flavour -->
     <div class="ann-group" id="ann-flavour">
       <div class="ann-dot orange" style="top:338px;left:62px;"></div>
       <div class="ann-line orange" style="top:338px;left:-26px;width:83px;"></div>
-      <div class="ann-pill orange" style="top:308px;left:-220px;">
-        <div class="ann-title">Find your flavour</div>
+      <div class="ann-pill orange" style="top:308px;left:-238px;">
+        <div class="ann-title">Find your flavour<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
         <div class="ann-desc">Primary &amp; specialty cuisine tags determine which tile a restaurant (partner) appears under.</div>
       </div>
-      <button class="ann-snap-btn orange" style="display:none;top:44px;left:10px;">
-        <svg class="snap-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 8.5V1.5M2 4.5l3-3 3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Find your flavour
-      </button>
     </div>
 
     <!-- Filters -->
     <div class="ann-group" id="ann-filter">
       <div class="ann-dot orange" style="top:415px;left:245px;"></div>
       <div class="ann-line orange" style="top:415px;left:-26px;width:266px;"></div>
-      <div class="ann-pill orange" style="top:390px;left:-220px;">
-        <div class="ann-title">Filters</div>
+      <div class="ann-pill orange" style="top:390px;left:-238px;">
+        <div class="ann-title">Filters<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
         <div class="ann-desc">Dietary tags (vegan, vegetarian, halal, etc) and mission tags map to these filters.</div>
       </div>
-      <button class="ann-snap-btn orange" style="display:none;top:44px;left:10px;">
-        <svg class="snap-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 8.5V1.5M2 4.5l3-3 3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Filters
-      </button>
     </div>
 
   </div>
@@ -952,14 +936,10 @@
     <div class="ann-group" id="ann-menu">
       <div class="ann-dot teal" style="top:375px;left:248px;"></div>
       <div class="ann-line teal" style="top:375px;left:253px;width:142px;"></div>
-      <div class="ann-pill teal" style="top:345px;left:399px;">
-        <div class="ann-title">Menu items</div>
+      <div class="ann-pill teal" style="top:345px;left:417px;">
+        <div class="ann-title">Menu items<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
         <div class="ann-desc">Standardised dish names from the Product Catalogue improve search accuracy — a user searching "chicken nuggets" surfaces this restaurant.</div>
       </div>
-      <button class="ann-snap-btn teal" style="display:none;top:44px;left:280px;">
-        <svg class="snap-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 8.5V1.5M2 4.5l3-3 3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Menu items
-      </button>
     </div>
 
   </div>
@@ -1008,61 +988,64 @@
       var bodyRect  = appBody.getBoundingClientRect();
       var bodyTop   = bodyRect.top    - phoneRect.top;
       var bodyBot   = bodyRect.bottom - phoneRect.top;
-      var aboveCnt  = 0;
-      var belowCnt  = 0;
+      var margin    = 12;
 
       config.items.forEach(function (item) {
-        var anchor  = document.getElementById(item.anchorId);
-        var group   = document.getElementById(item.groupId);
+        var anchor = document.getElementById(item.anchorId);
+        var group  = document.getElementById(item.groupId);
         if (!anchor || !group) return;
 
-        var dot     = group.querySelector('.ann-dot');
-        var line    = group.querySelector('.ann-line');
-        var pill    = group.querySelector('.ann-pill');
-        var snapBtn = group.querySelector('.ann-snap-btn');
+        var dot  = group.querySelector('.ann-dot');
+        var line = group.querySelector('.ann-line');
+        var pill = group.querySelector('.ann-pill');
 
         var aRect  = anchor.getBoundingClientRect();
         var dotY   = aRect.top - phoneRect.top + item.anchorY;
         var inView = dotY >= bodyTop + 2 && dotY <= bodyBot - 2;
 
-        if (inView) {
-          dot.style.display  = '';
-          line.style.display = '';
-          pill.style.display = '';
-          snapBtn.style.display = 'none';
+        /* ── Pill: always visible, clamped vertically ── */
+        var ph = pill.offsetHeight || 60;
+        var idealTop   = dotY - ph / 2;
+        var clampedTop = Math.max(bodyTop + margin, Math.min(bodyBot - ph - margin, idealTop));
+        pill.style.top     = clampedTop + 'px';
+        pill.style.display = '';
+        var pillMidY = clampedTop + ph / 2;
 
+        if (inView) {
+          /* Dot on the element */
           dot.style.top  = dotY + 'px';
           dot.style.left = item.dotX + 'px';
+          dot.classList.remove('is-collapsed');
 
+          /* Full-length line from pill edge to dot */
           if (item.side === 'left') {
             line.style.top   = dotY + 'px';
-            line.style.left  = '-26px';
-            line.style.width = (item.dotX - 5 + 26) + 'px';
+            line.style.left  = '-44px';
+            line.style.width = (item.dotX - 5 + 44) + 'px';
           } else {
             line.style.top   = dotY + 'px';
             line.style.left  = (item.dotX + 5) + 'px';
-            line.style.width = (395 - item.dotX - 5) + 'px';
+            line.style.width = (408 - item.dotX - 5) + 'px';
           }
 
-          var ph = pill.offsetHeight || 60;
-          pill.style.top = (dotY - ph / 2) + 'px';
-
         } else {
-          dot.style.display  = 'none';
-          line.style.display = 'none';
-          pill.style.display = 'none';
-          snapBtn.style.display = 'flex';
-
-          var isAbove = dotY < bodyTop;
-          var slotY   = isAbove
-            ? bodyTop  + 6  + aboveCnt++ * 30
-            : bodyBot  - 28 - belowCnt++ * 30;
-
-          snapBtn.style.top  = slotY + 'px';
-          snapBtn.style.left = item.side === 'left' ? '10px' : '272px';
-
-          var arrow = snapBtn.querySelector('.snap-arrow');
-          if (arrow) arrow.style.transform = isAbove ? '' : 'rotate(180deg)';
+          /* Dot parked 12px outside the phone bezel ring (bezel = 13px) */
+          if (item.side === 'left') {
+            dot.style.top  = pillMidY + 'px';
+            dot.style.left = '-25px';
+            /* Short stub: pill right edge → dot */
+            line.style.top   = pillMidY + 'px';
+            line.style.left  = '-44px';
+            line.style.width = '14px';
+          } else {
+            dot.style.top  = pillMidY + 'px';
+            dot.style.left = '400px';
+            /* Short stub: dot → pill left edge */
+            line.style.top   = pillMidY + 'px';
+            line.style.left  = '405px';
+            line.style.width = '8px';
+          }
+          dot.classList.add('is-collapsed');
         }
       });
     }
@@ -1070,17 +1053,27 @@
     update();
     appBody.addEventListener('scroll', update, { passive: true });
 
+    /* Click collapsed dot or pill title → scroll element back into view */
     config.items.forEach(function (item) {
-      var anchor  = document.getElementById(item.anchorId);
-      var group   = document.getElementById(item.groupId);
+      var anchor = document.getElementById(item.anchorId);
+      var group  = document.getElementById(item.groupId);
       if (!anchor || !group) return;
-      var snapBtn = group.querySelector('.ann-snap-btn');
-      snapBtn.addEventListener('click', function () {
+
+      function scrollToAnchor() {
         var bodyRect = appBody.getBoundingClientRect();
         var aRect    = anchor.getBoundingClientRect();
         var naturalY = aRect.top - bodyRect.top + appBody.scrollTop - item.anchorY;
         appBody.scrollTo({ top: Math.max(0, naturalY - bodyRect.height * 0.25), behavior: 'smooth' });
+      }
+
+      var dot   = group.querySelector('.ann-dot');
+      var title = group.querySelector('.ann-title');
+
+      dot.addEventListener('click', function () {
+        if (dot.classList.contains('is-collapsed')) scrollToAnchor();
       });
+
+      if (title) title.addEventListener('click', scrollToAnchor);
     });
   }
 
