@@ -21,7 +21,7 @@
     --je-black: #1a1a1a;
   }
 
-  body { background: var(--bg); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  body { background: var(--bg); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: auto; }
 
   /* ── Back nav ── */
   .back-nav {
@@ -44,9 +44,9 @@
 
   /* ── Phones layout ── */
   .page-wrap {
-    display: flex; justify-content: center; align-items: flex-start;
-    gap: 48px; padding: 48px 48px 80px;
-    overflow-x: auto; min-height: calc(100vh - 45px);
+    display: flex; justify-content: flex-start; align-items: flex-start;
+    gap: 48px; padding: 48px 280px 80px 270px;
+    min-height: calc(100vh - 45px);
   }
   .phone-col {
     display: flex; flex-direction: column; align-items: center;
@@ -351,7 +351,13 @@
   .ann-title {
     font-size: 11px; font-weight: 600; color: #f0f0f2;
     margin-bottom: 4px; font-family: 'DM Sans', sans-serif; line-height: 1.3;
+    cursor: pointer; pointer-events: auto;
+    text-decoration: underline; text-decoration-color: transparent;
+    transition: text-decoration-color .15s;
   }
+  .ann-title:hover { text-decoration-color: rgba(240,240,242,0.5); }
+  .ann-title-icon { display: inline; vertical-align: middle; margin-left: 4px; opacity: 0.45; transition: opacity .15s; }
+  .ann-title:hover .ann-title-icon { opacity: 0.85; }
   .ann-desc {
     font-size: 10px; color: #8a8a94; line-height: 1.55;
     font-family: 'DM Sans', sans-serif;
@@ -367,6 +373,14 @@
   .ann-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .ann-legend-dot.orange { background: #FF6600; }
   .ann-legend-dot.teal   { background: #0d9488; }
+
+  /* Dot — collapsed state (just outside phone bezel, clickable) */
+  .ann-dot.is-collapsed {
+    cursor: pointer;
+    width: 12px; height: 12px;
+    pointer-events: auto;
+  }
+  .ann-dot.is-collapsed:hover { opacity: .7; }
 
 </style>
 </head>
@@ -401,7 +415,7 @@
       </div>
     </div>
 
-    <div class="app-body">
+    <div class="app-body" id="home-body">
       <div class="app-header">
         <div class="loc-row">
           <div class="loc-name">
@@ -419,7 +433,7 @@
           </div>
         </div>
         <div class="search-row">
-          <div class="search-bar">
+          <div class="search-bar" id="h-search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6600" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <span class="search-ph">Looking for items?</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="17" cy="6" r="2.2" fill="#efefef" stroke="#666"/><circle cx="7" cy="18" r="2.2" fill="#efefef" stroke="#666"/></svg>
@@ -447,7 +461,7 @@
           <span class="sec-title">Find your flavour</span>
           <span class="show-all">Show all</span>
         </div>
-        <div class="tile-scroll">
+        <div class="tile-scroll" id="h-flavour">
           <div class="c-tile"><div class="c-img" style="background:linear-gradient(140deg,#c2410c,#fb923c);">🍕</div><span class="c-name">Italian style piz...</span></div>
           <div class="c-tile"><div class="c-img" style="background:linear-gradient(140deg,#3b0764,#7c3aed);">🍔</div><span class="c-name">Burgers</span></div>
           <div class="c-tile"><div class="c-img" style="background:linear-gradient(140deg,#be185d,#f472b6);">🍩</div><span class="c-name">Snacks</span></div>
@@ -457,7 +471,7 @@
       </div>
 
       <div class="filter-wrap">
-        <div class="filter-scroll">
+        <div class="filter-scroll" id="h-filter">
           <div class="f-pill active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 2.5h12l-4.2 5.6v5.4l-3.6-1.8V8.1L2 2.5z" stroke="#FF6600" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>Deals</div>
           <div class="f-pill">Free Delivery</div>
           <div class="f-pill">Vegetarian</div>
@@ -517,30 +531,36 @@
     </div>
   </div>
   <!-- Annotation layer — Home -->
-  <div class="ann-layer">
+  <div class="ann-layer" id="ann-home">
 
-    <!-- C: Search bar -->
-    <div class="ann-dot orange" style="top:105px;left:100px;"></div>
-    <div class="ann-line orange" style="top:105px;left:-26px;width:121px;"></div>
-    <div class="ann-pill orange" style="top:76px;left:-220px;">
-      <div class="ann-title">Search</div>
-      <div class="ann-desc">Cuisine tag names and dish names from the Product Catalogue are both indexed — searching "noodles" surfaces relevant restaurants even without an exact cuisine tag match. <span style="color:#0d9488;font-weight:600;">+ Dish taxonomy</span></div>
+    <!-- Search -->
+    <div class="ann-group" id="ann-search">
+      <div class="ann-dot orange" style="top:105px;left:100px;"></div>
+      <div class="ann-line orange" style="top:105px;left:-26px;width:121px;"></div>
+      <div class="ann-pill orange" style="top:76px;left:-238px;">
+        <div class="ann-title">Search<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="ann-desc">Cuisine tag names and dish names from the Product Catalogue are both indexed — searching "noodles" surfaces relevant restaurants even without an exact cuisine tag match. <span style="color:#0d9488;font-weight:600;">+ Dish taxonomy</span></div>
+      </div>
     </div>
 
-    <!-- A: Find your flavour tiles -->
-    <div class="ann-dot orange" style="top:338px;left:62px;"></div>
-    <div class="ann-line orange" style="top:338px;left:-26px;width:83px;"></div>
-    <div class="ann-pill orange" style="top:308px;left:-220px;">
-      <div class="ann-title">Find your flavour</div>
-      <div class="ann-desc">Primary &amp; Speciality cuisine tags from JETMS determine which tile a restaurant appears under.</div>
+    <!-- Find your flavour -->
+    <div class="ann-group" id="ann-flavour">
+      <div class="ann-dot orange" style="top:338px;left:62px;"></div>
+      <div class="ann-line orange" style="top:338px;left:-26px;width:83px;"></div>
+      <div class="ann-pill orange" style="top:308px;left:-238px;">
+        <div class="ann-title">Find your flavour<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="ann-desc">Primary &amp; specialty cuisine tags determine which tile a restaurant (partner) appears under.</div>
+      </div>
     </div>
 
-    <!-- B: Dietary filter pills -->
-    <div class="ann-dot orange" style="top:415px;left:245px;"></div>
-    <div class="ann-line orange" style="top:415px;left:-26px;width:266px;"></div>
-    <div class="ann-pill orange" style="top:390px;left:-220px;">
-      <div class="ann-title">Dietary filters</div>
-      <div class="ann-desc">Dietary tags (Vegan, Vegetarian, Halal…) assigned in JETMS map directly to these filter pills.</div>
+    <!-- Filters -->
+    <div class="ann-group" id="ann-filter">
+      <div class="ann-dot orange" style="top:415px;left:245px;"></div>
+      <div class="ann-line orange" style="top:415px;left:-26px;width:266px;"></div>
+      <div class="ann-pill orange" style="top:390px;left:-238px;">
+        <div class="ann-title">Filters<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="ann-desc">Dietary tags (vegan, vegetarian, halal, etc) and mission tags map to these filters.</div>
+      </div>
     </div>
 
   </div>
@@ -578,7 +598,7 @@
     </div>
 
     <!-- Scrollable body -->
-    <div class="app-body">
+    <div class="app-body" id="rest-body">
 
       <!-- Hero -->
       <div class="rp-hero">
@@ -620,13 +640,13 @@
       <div class="rp-cats">
         <div class="rp-cats-scroll">
           <span class="rp-cat-tab active">Popular</span>
-          <span class="rp-cat-tab">Burgers & menu's</span>
-          <span class="rp-cat-tab">Salades</span>
+          <span class="rp-cat-tab">Burgers & Meals</span>
+          <span class="rp-cat-tab">Salads</span>
           <span class="rp-cat-tab">Finger Food</span>
           <span class="rp-cat-tab">Happy Meals</span>
-          <span class="rp-cat-tab">Frites & Sausjes</span>
-          <span class="rp-cat-tab">Dranken</span>
-          <span class="rp-cat-tab">Overig</span>
+          <span class="rp-cat-tab">Fries & Sauces</span>
+          <span class="rp-cat-tab">Drinks</span>
+          <span class="rp-cat-tab">Other</span>
         </div>
       </div>
 
@@ -636,10 +656,10 @@
         <!-- Popular -->
         <div class="rp-section">
           <div class="rp-section-head">Popular</div>
-          <div class="rp-item">
+          <div class="rp-item" id="r-first-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Chicken McNuggets 20</div>
-              <div class="rp-item-desc">Knapperige kipstukjes gedompeld in een lichte beslag, gebakken tot goudbruin.</div>
+              <div class="rp-item-desc">Crispy chicken pieces dipped in a light batter, fried until golden brown.</div>
               <div class="rp-item-price">€12,95</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -649,8 +669,8 @@
           </div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Franse Frietjes groot</div>
-              <div class="rp-item-desc">Goudgele frietjes gebakken in 100% plantaardige olie.</div>
+              <div class="rp-item-name">Large Fries</div>
+              <div class="rp-item-desc">Golden fries cooked in 100% vegetable oil.</div>
               <div class="rp-item-price">€4,45</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -660,8 +680,8 @@
           </div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Big Arch Voordeelmenu</div>
-              <div class="rp-item-desc">Is de Big Arch jouw favoriet? Twee 100% rundvleesburgers, cheddar en speciale saus.</div>
+              <div class="rp-item-name">Big Arch Meal Deal</div>
+              <div class="rp-item-desc">Your Big Arch favourite — two 100% beef burgers, cheddar and special sauce.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€14,75</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -671,13 +691,13 @@
           </div>
         </div>
 
-        <!-- Burgers & menu's -->
+        <!-- Burgers & Meals -->
         <div class="rp-section">
-          <div class="rp-section-head">Burgers & menu's</div>
+          <div class="rp-section-head">Burgers & Meals</div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Big Arch Voordeelmenu</div>
-              <div class="rp-item-desc">Twee 100% rundvleesburgers, drie lagen broodje, cheddar en speciale Big Arch saus.</div>
+              <div class="rp-item-name">Big Arch Meal Deal</div>
+              <div class="rp-item-desc">Two 100% beef burgers, triple-layered bun, cheddar and special Big Arch sauce.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€14,75</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -687,8 +707,8 @@
           </div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">McSampler Chicken Burger Voordeelmenu</div>
-              <div class="rp-item-desc">McSampler is ook verkrijgbaar in drie smaken. Jouw keuze, onze burger.</div>
+              <div class="rp-item-name">McSampler Chicken Burger Meal Deal</div>
+              <div class="rp-item-desc">McSampler comes in three flavours. Your choice, our burger.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€14,35</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -698,27 +718,27 @@
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
-              <div class="rp-item-name">McCrispy Voordeelmenu</div>
-              <div class="rp-item-desc">Crispy kip in een zacht briochebroodje met sla en mayonaise.</div>
+              <div class="rp-item-name">McCrispy Meal Deal</div>
+              <div class="rp-item-desc">Crispy chicken in a soft brioche bun with lettuce and mayonnaise.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€13,75</div>
             </div>
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
-              <div class="rp-item-name">McChicken Voordeelmenu</div>
-              <div class="rp-item-desc">De klassieker met crispy kipfilet, sla en McChicken saus.</div>
+              <div class="rp-item-name">McChicken Meal Deal</div>
+              <div class="rp-item-desc">The classic with crispy chicken fillet, lettuce and McChicken sauce.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€12,95</div>
             </div>
           </div>
         </div>
 
-        <!-- Salades -->
+        <!-- Salads -->
         <div class="rp-section">
-          <div class="rp-section-head">Salades</div>
+          <div class="rp-section-head">Salads</div>
           <div class="rp-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Chicken Salad Honey Mustard</div>
-              <div class="rp-item-desc">Verse salade met Crispy Chicken en een zoete honing-mosterd dressing.</div>
+              <div class="rp-item-desc">Fresh salad with Crispy Chicken and a sweet honey mustard dressing.</div>
               <div class="rp-item-price">€7,25</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -729,7 +749,7 @@
           <div class="rp-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Meatless Crispy Chicken Salad Honey Mustard</div>
-              <div class="rp-item-desc">Plantaardige Crispy Chicken op een verse salade met honing-mosterd.</div>
+              <div class="rp-item-desc">Plant-based Crispy Chicken on a fresh salad with honey mustard.</div>
               <div class="rp-item-price">€7,75</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -744,8 +764,8 @@
           <div class="rp-section-head">Finger Food</div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Chicken Wings 6 stuks</div>
-              <div class="rp-item-desc">Sappige kippenvleugels met een knapperig jasje, geserveerd in een doosje.</div>
+              <div class="rp-item-name">Chicken Wings 6 Pieces</div>
+              <div class="rp-item-desc">Juicy chicken wings with a crispy coating, served in a box.</div>
               <div class="rp-item-price">€4,45</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -756,7 +776,7 @@
           <div class="rp-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Chicken McNuggets 6</div>
-              <div class="rp-item-desc">Speciale McDonald's krokante nuggets — het beste hapje voor onderweg.</div>
+              <div class="rp-item-desc">McDonald's signature crispy nuggets — the perfect snack on the go.</div>
               <div class="rp-item-price">€3,85</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -771,8 +791,8 @@
           <div class="rp-section-head">Happy Meals</div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Happy Meal Hamburger met Besker</div>
-              <div class="rp-item-desc">Happy Meal met een hamburger, kleine frietjes, appel en drankje naar keuze.</div>
+              <div class="rp-item-name">Happy Meal Hamburger with Cup</div>
+              <div class="rp-item-desc">Happy Meal with a hamburger, small fries, apple and a drink of your choice.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€7,25</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -782,20 +802,20 @@
           </div>
         </div>
 
-        <!-- Frites & Sausjes -->
+        <!-- Fries & Sauces -->
         <div class="rp-section">
-          <div class="rp-section-head">Frites & Sausjes</div>
+          <div class="rp-section-head">Fries & Sauces</div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
-              <div class="rp-item-name">Kleine Frietjes</div>
-              <div class="rp-item-desc">Goudgele dunne frietjes, gebakken in 100% plantaardige olie.</div>
+              <div class="rp-item-name">Small Fries</div>
+              <div class="rp-item-desc">Golden thin fries, cooked in 100% vegetable oil.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€2,20</div>
             </div>
           </div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Franse Frietjes groot</div>
-              <div class="rp-item-desc">Goudgele frietjes, gebakken in 100% plantaardige olie.</div>
+              <div class="rp-item-name">Large Fries</div>
+              <div class="rp-item-desc">Golden fries, cooked in 100% vegetable oil.</div>
               <div class="rp-item-price">€4,30</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -806,47 +826,47 @@
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Ketchup</div>
-              <div class="rp-item-desc">Portie ketchup.</div>
+              <div class="rp-item-desc">Serving of ketchup.</div>
               <div class="rp-item-price">€0,30</div>
             </div>
           </div>
         </div>
 
-        <!-- Dranken -->
+        <!-- Drinks -->
         <div class="rp-section">
-          <div class="rp-section-head">Dranken</div>
+          <div class="rp-section-head">Drinks</div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Coca-Cola Zero</div>
-              <div class="rp-item-desc">Verfrissende Coca-Cola Zero. *Bij bezorgen van een frisdrank betaal je een drankje toeslag.</div>
+              <div class="rp-item-desc">Refreshing Coca-Cola Zero. *A drinks surcharge applies on delivery.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€1,85</div>
             </div>
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Coca-Cola Cherry Zero Sugar</div>
-              <div class="rp-item-desc">Coca-Cola met een vleugje kersensmaak, zonder suiker.</div>
+              <div class="rp-item-desc">Coca-Cola with a hint of cherry flavour, no sugar.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€3,00</div>
             </div>
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Coca-Cola</div>
-              <div class="rp-item-desc">Happy Coke — het origineel. *Bij bezorgen van een drankje toeslag.</div>
+              <div class="rp-item-desc">The original Coca-Cola. *A drinks surcharge applies on delivery.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€3,60</div>
             </div>
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Sprite Zero Sugar</div>
-              <div class="rp-item-desc">Fris en helder, zonder suiker.</div>
+              <div class="rp-item-desc">Fresh and clear, no sugar.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€3,25</div>
             </div>
           </div>
           <div class="rp-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Milk Shake Vanilla</div>
-              <div class="rp-item-desc">Smelt in je mond — dikke vanille milkshake met slagroom.</div>
+              <div class="rp-item-desc">Melts in your mouth — thick vanilla milkshake with whipped cream.</div>
               <div class="rp-item-price"><span class="from">v.a.</span>€3,95</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -856,13 +876,13 @@
           </div>
         </div>
 
-        <!-- Sundae & Overig -->
+        <!-- Sundae & Other -->
         <div class="rp-section">
-          <div class="rp-section-head">Sundae Chocolade &amp; Overig</div>
+          <div class="rp-section-head">Sundae Chocolate &amp; Other</div>
           <div class="rp-item">
             <div class="rp-item-text">
-              <div class="rp-item-name">Sundae Chocolade</div>
-              <div class="rp-item-desc">Softijs gegoten op Princes de chocolade saus, afgewerkt in een bakje.</div>
+              <div class="rp-item-name">Sundae Chocolate</div>
+              <div class="rp-item-desc">Soft ice cream topped with rich chocolate sauce, served in a cup.</div>
               <div class="rp-item-price">€4,90</div>
             </div>
             <div class="rp-item-img-wrap">
@@ -873,14 +893,14 @@
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Raspberry Spicy Orange</div>
-              <div class="rp-item-desc">Fruitige frisdrank met een twist — framboos en sinaasappel.</div>
+              <div class="rp-item-desc">A fruity soft drink with a twist — raspberry and orange.</div>
               <div class="rp-item-price">€4,25</div>
             </div>
           </div>
           <div class="rp-item rp-item-no-img">
             <div class="rp-item-text">
               <div class="rp-item-name">Triple Chocolate Cookie</div>
-              <div class="rp-item-desc">Cookie met pure chocolade, pure chocolade stukjes en witte chocolade — drie smaken, één cookie.</div>
+              <div class="rp-item-desc">Cookie with dark chocolate, chocolate chips and white chocolate — three flavours, one cookie.</div>
               <div class="rp-item-price">€1,80</div>
             </div>
           </div>
@@ -910,14 +930,16 @@
 
   </div>
   <!-- Annotation layer — Restaurant -->
-  <div class="ann-layer">
+  <div class="ann-layer" id="ann-rest">
 
-    <!-- D: Menu item names -->
-    <div class="ann-dot teal" style="top:375px;left:248px;"></div>
-    <div class="ann-line teal" style="top:375px;left:253px;width:142px;"></div>
-    <div class="ann-pill teal" style="top:345px;left:399px;">
-      <div class="ann-title">Menu items</div>
-      <div class="ann-desc">Standardised dish names from the Product Catalogue improve search accuracy — a user searching "chicken nuggets" surfaces this restaurant.</div>
+    <!-- Menu items -->
+    <div class="ann-group" id="ann-menu">
+      <div class="ann-dot teal" style="top:375px;left:248px;"></div>
+      <div class="ann-line teal" style="top:375px;left:253px;width:142px;"></div>
+      <div class="ann-pill teal" style="top:345px;left:417px;">
+        <div class="ann-title">Menu items<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="ann-desc">Standardised dish names from the Product Catalogue improve search accuracy — a user searching "chicken nuggets" surfaces this restaurant.</div>
+      </div>
     </div>
 
   </div>
@@ -937,5 +959,132 @@
   </div>
 </div>
 
+<script>
+(function () {
+  var configs = [
+    {
+      bodyId: 'home-body',
+      items: [
+        { groupId: 'ann-search',  anchorId: 'h-search',  dotX: 100, anchorY: 17, side: 'left'  },
+        { groupId: 'ann-flavour', anchorId: 'h-flavour', dotX: 62,  anchorY: 39, side: 'left'  },
+        { groupId: 'ann-filter',  anchorId: 'h-filter',  dotX: 245, anchorY: 15, side: 'left'  }
+      ]
+    },
+    {
+      bodyId: 'rest-body',
+      items: [
+        { groupId: 'ann-menu', anchorId: 'r-first-item', dotX: 248, anchorY: 38, side: 'right' }
+      ]
+    }
+  ];
+
+  function setupPhone(config) {
+    var appBody = document.getElementById(config.bodyId);
+    if (!appBody) return;
+    var phone = appBody.closest('.phone');
+
+    function update() {
+      var phoneRect = phone.getBoundingClientRect();
+      var bodyRect  = appBody.getBoundingClientRect();
+      var bodyTop   = bodyRect.top    - phoneRect.top;
+      var bodyBot   = bodyRect.bottom - phoneRect.top;
+      var margin    = 12;
+
+      config.items.forEach(function (item) {
+        var anchor = document.getElementById(item.anchorId);
+        var group  = document.getElementById(item.groupId);
+        if (!anchor || !group) return;
+
+        var dot  = group.querySelector('.ann-dot');
+        var line = group.querySelector('.ann-line');
+        var pill = group.querySelector('.ann-pill');
+
+        var aRect  = anchor.getBoundingClientRect();
+        var dotY   = aRect.top - phoneRect.top + item.anchorY;
+        var inView = dotY >= bodyTop + 2 && dotY <= bodyBot - 2;
+
+        /* ── Pill: always visible, clamped vertically ── */
+        var ph = pill.offsetHeight || 60;
+        var idealTop   = dotY - ph / 2;
+        var clampedTop = Math.max(bodyTop + margin, Math.min(bodyBot - ph - margin, idealTop));
+        pill.style.top     = clampedTop + 'px';
+        pill.style.display = '';
+        var pillMidY = clampedTop + ph / 2;
+
+        if (inView) {
+          /* Dot on the element */
+          dot.style.top  = dotY + 'px';
+          dot.style.left = item.dotX + 'px';
+          dot.classList.remove('is-collapsed');
+
+          /* Full-length line from pill edge to dot */
+          if (item.side === 'left') {
+            line.style.top   = dotY + 'px';
+            line.style.left  = '-44px';
+            line.style.width = (item.dotX - 5 + 44) + 'px';
+          } else {
+            line.style.top   = dotY + 'px';
+            line.style.left  = (item.dotX + 5) + 'px';
+            line.style.width = (408 - item.dotX - 5) + 'px';
+          }
+
+        } else {
+          /* Dot parked 12px outside the phone bezel ring (bezel = 13px) */
+          if (item.side === 'left') {
+            dot.style.top  = pillMidY + 'px';
+            dot.style.left = '-25px';
+            /* Short stub: pill right edge → dot */
+            line.style.top   = pillMidY + 'px';
+            line.style.left  = '-44px';
+            line.style.width = '14px';
+          } else {
+            dot.style.top  = pillMidY + 'px';
+            dot.style.left = '400px';
+            /* Short stub: dot → pill left edge */
+            line.style.top   = pillMidY + 'px';
+            line.style.left  = '405px';
+            line.style.width = '8px';
+          }
+          dot.classList.add('is-collapsed');
+        }
+      });
+    }
+
+    update();
+    appBody.addEventListener('scroll', update, { passive: true });
+
+    /* Click collapsed dot or pill title → scroll element back into view */
+    config.items.forEach(function (item) {
+      var anchor = document.getElementById(item.anchorId);
+      var group  = document.getElementById(item.groupId);
+      if (!anchor || !group) return;
+
+      function scrollToAnchor() {
+        var bodyRect = appBody.getBoundingClientRect();
+        var aRect    = anchor.getBoundingClientRect();
+        var naturalY = aRect.top - bodyRect.top + appBody.scrollTop - item.anchorY;
+        appBody.scrollTo({ top: Math.max(0, naturalY - bodyRect.height * 0.25), behavior: 'smooth' });
+      }
+
+      var dot   = group.querySelector('.ann-dot');
+      var title = group.querySelector('.ann-title');
+
+      dot.addEventListener('click', function () {
+        if (dot.classList.contains('is-collapsed')) scrollToAnchor();
+      });
+
+      if (title) title.addEventListener('click', scrollToAnchor);
+    });
+  }
+
+  function init() { configs.forEach(setupPhone); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 </html>
