@@ -339,8 +339,12 @@
     position: absolute; height: 0;
     border-top: 1.5px dashed; z-index: 51;
   }
-  .ann-line.orange { border-color: rgba(255,102,0,0.5); }
-  .ann-line.teal   { border-color: rgba(13,148,136,0.5); }
+  .ann-line-v {
+    position: absolute; width: 0;
+    border-left: 1.5px dashed; z-index: 51;
+  }
+  .ann-line.orange,  .ann-line-v.orange { border-color: rgba(255,102,0,0.5); }
+  .ann-line.teal,    .ann-line-v.teal   { border-color: rgba(13,148,136,0.5); }
   .ann-pill {
     position: absolute; width: 190px;
     background: #1e1e22; border: 1px solid #2a2a2e;
@@ -371,8 +375,18 @@
     font-size: 12px; color: var(--text-muted); font-weight: 500;
   }
   .ann-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .ann-legend-dot.orange { background: #FF6600; }
-  .ann-legend-dot.teal   { background: #0d9488; }
+  .ann-legend-dot.orange  { background: #FF6600; }
+  .ann-legend-dot.teal    { background: #0d9488; }
+  .ann-legend-dot.indigo  { background: #7c3aed; }
+  .ann-dot.indigo  { background: #7c3aed; box-shadow: 0 0 0 4px rgba(124,58,237,0.18); }
+  .ann-line.indigo,  .ann-line-v.indigo { border-color: rgba(124,58,237,0.5); }
+  .ann-pill.indigo { border-left: 3px solid #7c3aed; }
+  .ann-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+  .ann-tag { font-size: 9px; font-weight: 600; font-family: 'DM Sans', sans-serif; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.02em; line-height: 1.4; }
+  .ann-tag.cuisine { background: rgba(255,102,0,0.12); color: #FF6600; border: 1px solid rgba(255,102,0,0.3); }
+  .ann-tag.dish    { background: rgba(13,148,136,0.12); color: #0d9488; border: 1px solid rgba(13,148,136,0.3); }
+  .ann-tag.upc     { background: rgba(124,58,237,0.12); color: #7c3aed; border: 1px solid rgba(124,58,237,0.3); }
+  .rp-voucher { display: inline-block; background: rgba(124,58,237,0.08); color: #7c3aed; border: 1px solid rgba(124,58,237,0.2); border-radius: 3px; font-size: 8px; font-weight: 600; padding: 1px 5px; margin-left: 5px; vertical-align: middle; letter-spacing: 0.01em; }
 
   /* Dot — collapsed state (just outside phone bezel, clickable) */
   .ann-dot.is-collapsed {
@@ -536,30 +550,36 @@
     <!-- Search -->
     <div class="ann-group" id="ann-search">
       <div class="ann-dot orange" style="top:105px;left:100px;"></div>
-      <div class="ann-line orange" style="top:105px;left:-26px;width:121px;"></div>
-      <div class="ann-pill orange" style="top:76px;left:-238px;">
+      <div class="ann-line orange" style="top:105px;left:-12px;width:113px;"></div>
+      <div class="ann-line-v orange" style="height:0;left:-12px;"></div>
+      <div class="ann-pill orange" style="top:76px;left:-202px;">
         <div class="ann-title">Search<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-        <div class="ann-desc">Cuisine tag names and dish names from the Product Catalogue are both indexed — searching "noodles" surfaces relevant restaurants even without an exact cuisine tag match. <span style="color:#0d9488;font-weight:600;">+ Dish taxonomy</span></div>
+        <div class="ann-desc">Cuisine tags and standardised dish names are both indexed — enabling reliable search and personalised recommendations across the catalogue. How dish taxonomy works in collaboration with cuisine taxonomy is to be discussed further.</div>
+        <div class="ann-tags"><span class="ann-tag cuisine">Cuisine taxonomy</span><span class="ann-tag dish">Dish taxonomy</span><span class="ann-tag upc">UPC</span></div>
       </div>
     </div>
 
     <!-- Find your flavour -->
     <div class="ann-group" id="ann-flavour">
       <div class="ann-dot orange" style="top:338px;left:62px;"></div>
-      <div class="ann-line orange" style="top:338px;left:-26px;width:83px;"></div>
-      <div class="ann-pill orange" style="top:308px;left:-238px;">
+      <div class="ann-line orange" style="top:338px;left:-12px;width:69px;"></div>
+      <div class="ann-line-v orange" style="height:0;left:-12px;"></div>
+      <div class="ann-pill orange" style="top:308px;left:-202px;">
         <div class="ann-title">Find your flavour<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-        <div class="ann-desc">Primary &amp; specialty cuisine tags determine which tile a restaurant (partner) appears under.</div>
+        <div class="ann-desc">Primary &amp; specialty cuisine tags determine which tile a restaurant appears under — ensuring consistent product discovery by cuisine.</div>
+        <div class="ann-tags"><span class="ann-tag cuisine">Cuisine taxonomy</span></div>
       </div>
     </div>
 
     <!-- Filters -->
     <div class="ann-group" id="ann-filter">
       <div class="ann-dot orange" style="top:415px;left:245px;"></div>
-      <div class="ann-line orange" style="top:415px;left:-26px;width:266px;"></div>
-      <div class="ann-pill orange" style="top:390px;left:-238px;">
+      <div class="ann-line orange" style="top:415px;left:-12px;width:252px;"></div>
+      <div class="ann-line-v orange" style="height:0;left:-12px;"></div>
+      <div class="ann-pill orange" style="top:390px;left:-202px;">
         <div class="ann-title">Filters<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-        <div class="ann-desc">Dietary tags (vegan, vegetarian, halal, etc) and mission tags map to these filters.</div>
+        <div class="ann-desc">Dietary tags (vegan, vegetarian, halal, etc) and mission tags map to these filters — surfacing safe options using complete dietary data.</div>
+        <div class="ann-tags"><span class="ann-tag cuisine">Cuisine taxonomy</span><span class="ann-tag upc">UPC</span></div>
       </div>
     </div>
 
@@ -660,7 +680,7 @@
             <div class="rp-item-text">
               <div class="rp-item-name">Chicken McNuggets 20</div>
               <div class="rp-item-desc">Crispy chicken pieces dipped in a light batter, fried until golden brown.</div>
-              <div class="rp-item-price">€12,95</div>
+              <div class="rp-item-price">€12,95<span class="rp-voucher">voucher</span></div>
             </div>
             <div class="rp-item-img-wrap">
               <div class="rp-item-img" style="background:linear-gradient(135deg,#fbbf24,#f59e0b);">🍗</div>
@@ -671,18 +691,18 @@
             <div class="rp-item-text">
               <div class="rp-item-name">Large Fries</div>
               <div class="rp-item-desc">Golden fries cooked in 100% vegetable oil.</div>
-              <div class="rp-item-price">€4,45</div>
+              <div class="rp-item-price">€4,45<span class="rp-voucher">voucher</span></div>
             </div>
             <div class="rp-item-img-wrap">
               <div class="rp-item-img" style="background:linear-gradient(135deg,#fde68a,#fbbf24);">🍟</div>
               <button class="rp-add-btn">+</button>
             </div>
           </div>
-          <div class="rp-item">
+          <div class="rp-item" id="r-voucher-item">
             <div class="rp-item-text">
               <div class="rp-item-name">Big Arch Meal Deal</div>
               <div class="rp-item-desc">Your Big Arch favourite — two 100% beef burgers, cheddar and special sauce.</div>
-              <div class="rp-item-price"><span class="from">v.a.</span>€14,75</div>
+              <div class="rp-item-price"><span class="from">v.a.</span>€14,75<span class="rp-voucher">voucher</span></div>
             </div>
             <div class="rp-item-img-wrap">
               <div class="rp-item-img" style="background:linear-gradient(135deg,#c2410c,#f97316);">🍔</div>
@@ -698,7 +718,7 @@
             <div class="rp-item-text">
               <div class="rp-item-name">Big Arch Meal Deal</div>
               <div class="rp-item-desc">Two 100% beef burgers, triple-layered bun, cheddar and special Big Arch sauce.</div>
-              <div class="rp-item-price"><span class="from">v.a.</span>€14,75</div>
+              <div class="rp-item-price"><span class="from">v.a.</span>€14,75<span class="rp-voucher">voucher</span></div>
             </div>
             <div class="rp-item-img-wrap">
               <div class="rp-item-img" style="background:linear-gradient(135deg,#c2410c,#f97316);">🍔</div>
@@ -709,7 +729,7 @@
             <div class="rp-item-text">
               <div class="rp-item-name">McSampler Chicken Burger Meal Deal</div>
               <div class="rp-item-desc">McSampler comes in three flavours. Your choice, our burger.</div>
-              <div class="rp-item-price"><span class="from">v.a.</span>€14,35</div>
+              <div class="rp-item-price"><span class="from">v.a.</span>€14,35<span class="rp-voucher">voucher</span></div>
             </div>
             <div class="rp-item-img-wrap">
               <div class="rp-item-img" style="background:linear-gradient(135deg,#92400e,#d97706);">🍔</div>
@@ -935,10 +955,24 @@
     <!-- Menu items -->
     <div class="ann-group" id="ann-menu">
       <div class="ann-dot teal" style="top:375px;left:248px;"></div>
-      <div class="ann-line teal" style="top:375px;left:253px;width:142px;"></div>
-      <div class="ann-pill teal" style="top:345px;left:417px;">
+      <div class="ann-line teal" style="top:375px;left:253px;width:127px;"></div>
+      <div class="ann-line-v teal" style="height:0;left:380px;"></div>
+      <div class="ann-pill teal" style="top:345px;left:380px;">
         <div class="ann-title">Menu items<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-        <div class="ann-desc">Standardised dish names from the Product Catalogue improve search accuracy — a user searching "chicken nuggets" surfaces this restaurant.</div>
+        <div class="ann-desc">Standardised dish names, allergens, and dietary data from the Product Catalogue power accurate search, safe option confidence, and better substitution signals.</div>
+        <div class="ann-tags"><span class="ann-tag dish">Dish taxonomy</span><span class="ann-tag upc">UPC</span></div>
+      </div>
+    </div>
+
+    <!-- Vouchers -->
+    <div class="ann-group" id="ann-voucher">
+      <div class="ann-dot indigo" style="top:490px;left:248px;"></div>
+      <div class="ann-line indigo" style="top:490px;left:253px;width:127px;"></div>
+      <div class="ann-line-v indigo" style="height:0;left:380px;"></div>
+      <div class="ann-pill indigo" style="top:460px;left:380px;">
+        <div class="ann-title">Vouchers<svg class="ann-title-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="ann-desc">Vouchers are redeemed against matched product IDs — the Product Catalogue ensures the right items are discounted, not just name-matched strings.</div>
+        <div class="ann-tags"><span class="ann-tag upc">UPC</span></div>
       </div>
     </div>
 
@@ -957,6 +991,10 @@
     <div class="ann-legend-dot teal"></div>
     Dish taxonomy (Product Catalogue)
   </div>
+  <div class="ann-legend-item">
+    <div class="ann-legend-dot indigo"></div>
+    Universal Product Catalogue (UPC)
+  </div>
 </div>
 
 <script>
@@ -973,7 +1011,8 @@
     {
       bodyId: 'rest-body',
       items: [
-        { groupId: 'ann-menu', anchorId: 'r-first-item', dotX: 248, anchorY: 38, side: 'right' }
+        { groupId: 'ann-menu',    anchorId: 'r-first-item',   dotX: 248, anchorY: 38, side: 'right' },
+        { groupId: 'ann-voucher', anchorId: 'r-voucher-item', dotX: 248, anchorY: 55, side: 'right' }
       ]
     }
   ];
@@ -989,63 +1028,104 @@
       var bodyTop   = bodyRect.top    - phoneRect.top;
       var bodyBot   = bodyRect.bottom - phoneRect.top;
       var margin    = 12;
+      var ELBOW_L   = -12;
+      var ELBOW_R   = 380;
+      var DOT_L     = -25;
+      var DOT_R     = 400;
+      var PILL_W    = 190;
 
+      /* ── Pass 1: compute positions ── */
+      var positions = [];
       config.items.forEach(function (item) {
         var anchor = document.getElementById(item.anchorId);
         var group  = document.getElementById(item.groupId);
         if (!anchor || !group) return;
-
-        var dot  = group.querySelector('.ann-dot');
-        var line = group.querySelector('.ann-line');
-        var pill = group.querySelector('.ann-pill');
-
-        var aRect  = anchor.getBoundingClientRect();
-        var dotY   = aRect.top - phoneRect.top + item.anchorY;
+        var dot   = group.querySelector('.ann-dot');
+        var lineH = group.querySelector('.ann-line');
+        var lineV = group.querySelector('.ann-line-v');
+        var pill  = group.querySelector('.ann-pill');
+        var aRect = anchor.getBoundingClientRect();
+        var dotY  = aRect.top - phoneRect.top + item.anchorY;
         var inView = dotY >= bodyTop + 2 && dotY <= bodyBot - 2;
-
-        /* ── Pill: always visible, clamped vertically ── */
-        var ph = pill.offsetHeight || 60;
+        var ph    = pill.offsetHeight || 70;
         var idealTop   = dotY - ph / 2;
         var clampedTop = Math.max(bodyTop + margin, Math.min(bodyBot - ph - margin, idealTop));
+        positions.push({ item: item, dot: dot, lineH: lineH, lineV: lineV, pill: pill,
+                         dotY: dotY, inView: inView, ph: ph, clampedTop: clampedTop });
+      });
+
+      /* ── Pass 2: push overlapping same-side pills apart ── */
+      ['left', 'right'].forEach(function (side) {
+        var grp = positions.filter(function (p) { return p.item.side === side; });
+        grp.sort(function (a, b) { return a.clampedTop - b.clampedTop; });
+        for (var i = 1; i < grp.length; i++) {
+          var prev = grp[i - 1];
+          var curr = grp[i];
+          var minTop = prev.clampedTop + prev.ph + 8;
+          if (curr.clampedTop < minTop) {
+            curr.clampedTop = Math.min(minTop, bodyBot - curr.ph - margin);
+          }
+        }
+      });
+
+      /* ── Pass 3: apply ── */
+      positions.forEach(function (pos) {
+        var item  = pos.item;
+        var dot   = pos.dot;
+        var lineH = pos.lineH;
+        var lineV = pos.lineV;
+        var pill  = pos.pill;
+        var dotY       = pos.dotY;
+        var inView     = pos.inView;
+        var ph         = pos.ph;
+        var clampedTop = pos.clampedTop;
+        var pillMidY   = clampedTop + ph / 2;
+
         pill.style.top     = clampedTop + 'px';
+        pill.style.left    = (item.side === 'left' ? (ELBOW_L - PILL_W) : ELBOW_R) + 'px';
         pill.style.display = '';
-        var pillMidY = clampedTop + ph / 2;
 
         if (inView) {
-          /* Dot on the element */
           dot.style.top  = dotY + 'px';
           dot.style.left = item.dotX + 'px';
           dot.classList.remove('is-collapsed');
 
-          /* Full-length line from pill edge to dot */
           if (item.side === 'left') {
-            line.style.top   = dotY + 'px';
-            line.style.left  = '-44px';
-            line.style.width = (item.dotX - 5 + 44) + 'px';
+            lineH.style.top    = dotY + 'px';
+            lineH.style.left   = ELBOW_L + 'px';
+            lineH.style.width  = (item.dotX - 5 - ELBOW_L) + 'px';
+            var vTop = Math.min(dotY, pillMidY);
+            lineV.style.top    = vTop + 'px';
+            lineV.style.left   = ELBOW_L + 'px';
+            lineV.style.height = Math.abs(dotY - pillMidY) + 'px';
+            lineV.style.display = '';
           } else {
-            line.style.top   = dotY + 'px';
-            line.style.left  = (item.dotX + 5) + 'px';
-            line.style.width = (408 - item.dotX - 5) + 'px';
+            lineH.style.top    = dotY + 'px';
+            lineH.style.left   = (item.dotX + 5) + 'px';
+            lineH.style.width  = (ELBOW_R - item.dotX - 5) + 'px';
+            var vTop = Math.min(dotY, pillMidY);
+            lineV.style.top    = vTop + 'px';
+            lineV.style.left   = ELBOW_R + 'px';
+            lineV.style.height = Math.abs(dotY - pillMidY) + 'px';
+            lineV.style.display = '';
           }
 
         } else {
-          /* Dot parked 12px outside the phone bezel ring (bezel = 13px) */
+          dot.classList.add('is-collapsed');
           if (item.side === 'left') {
             dot.style.top  = pillMidY + 'px';
-            dot.style.left = '-25px';
-            /* Short stub: pill right edge → dot */
-            line.style.top   = pillMidY + 'px';
-            line.style.left  = '-44px';
-            line.style.width = '14px';
+            dot.style.left = DOT_L + 'px';
+            lineH.style.top    = pillMidY + 'px';
+            lineH.style.left   = DOT_L + 'px';
+            lineH.style.width  = (ELBOW_L - DOT_L) + 'px';
           } else {
             dot.style.top  = pillMidY + 'px';
-            dot.style.left = '400px';
-            /* Short stub: dot → pill left edge */
-            line.style.top   = pillMidY + 'px';
-            line.style.left  = '405px';
-            line.style.width = '8px';
+            dot.style.left = DOT_R + 'px';
+            lineH.style.top    = pillMidY + 'px';
+            lineH.style.left   = ELBOW_R + 'px';
+            lineH.style.width  = (DOT_R - ELBOW_R) + 'px';
           }
-          dot.classList.add('is-collapsed');
+          lineV.style.display = 'none';
         }
       });
     }
